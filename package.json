@@ -1,5 +1,5 @@
 {
-  "name": "@h1totsu/mf-cli",
+  "name": "@h1totsu/auth-shared",
   "version": "0.1.0",
   "description": "Shared auth",
   "main": "dist/index.js",
@@ -13,6 +13,7 @@
     "clean": "rimraf dist",
     "build": "npm run clean && tsc -p tsconfig.build.json"
   },
+  "private": false,
   "license": "ISC",
   "devDependencies": {
     "@aws-amplify/auth": "^4.5.9",

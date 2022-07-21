@@ -8,6 +8,7 @@
   "files": [
     "dist"
   ],
+  "repository": "https://github.com/kostiantynromanenko/auth-shared",
   "scripts": {
     "clean": "rimraf dist",
     "build": "npm run clean && tsc -p tsconfig.build.json"

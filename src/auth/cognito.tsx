@@ -1,31 +1,71 @@
-import React, {PropsWithChildren} from "react";
-import {
-    AccessToken,
-    AuthContext,
-    AuthServiceProvider,
-    SignInCredentials, useProvideAuth
-} from "./index";
-import {a, Auth} from 'aws-amplify';
-import {CognitoUser} from "amazon-cognito-identity-js";
+import React, { ReactNode, useEffect, useState } from 'react';
+import { Auth, Hub } from 'aws-amplify';
+import { AuthContext, AuthContextState, AuthUser, SignInCredentials } from './auth';
+import { CognitoUser } from 'amazon-cognito-identity-js';
 
-export class CognitoAuthService implements AuthServiceProvider {
-    async getAccessToken(): Promise<AccessToken> {
-        const session = await Auth.currentSession();
-        const token = session.getAccessToken();
-        return token.getJwtToken();
-    }
+export const CognitoAuth = Auth;
 
-    signIn(credentials: SignInCredentials): Promise<CognitoUser> {
-        return Auth.signIn(credentials.username, credentials.password, credentials.clientMetadata);
-    }
+const useProvideCognitoAuth = (): AuthContextState => {
+    const [user, setUser] = useState<AuthUser | null>(null);
 
-    signOut(): Promise<void> {
-        return Auth.signOut();
-    }
-}
+    useEffect(() => {
+        const authListener = () => {
+            checkUser().catch();
+        };
 
-export const CognitoAuthProvider = ({children}: PropsWithChildren<any>) => {
-    const authService = new CognitoAuthService();
-    const auth = useProvideAuth(authService);
+        authListener();
+
+        Hub.listen('auth', authListener);
+
+        return (): void => {
+            Hub.remove('auth', authListener);
+        };
+    }, []);
+
+    const checkUser = async (): Promise<void> => {
+        try {
+            const cognitoUser: CognitoUser = await Auth.currentAuthenticatedUser();
+
+            if (cognitoUser) {
+                const authUser: AuthUser = {
+                    email: cognitoUser.getUsername(),
+                    username: cognitoUser.getUsername(),
+                };
+
+                setUser(authUser);
+            }
+        } catch (error) {
+            setUser(null);
+        }
+    };
+
+    const signIn = async ({ username, password }: SignInCredentials): Promise<AuthUser> => {
+        const cognitoUser: CognitoUser = await CognitoAuth.signIn({ username, password });
+
+        if (cognitoUser?.challengeName === 'NEW_PASSWORD_REQUIRED') {
+            await CognitoAuth.completeNewPassword(cognitoUser, password);
+            return Promise.reject('New password confirmed.');
+        }
+
+        const authUser: AuthUser = {
+            username,
+            email: cognitoUser.getUsername(),
+        };
+
+        return Promise.resolve(authUser);
+    };
+
+    const signOut = () => CognitoAuth.signOut();
+
+    return {
+        user,
+        signIn,
+        signOut,
+    };
+};
+
+export const CognitoAuthProvider = ({ children }: { children: ReactNode }) => {
+    const auth = useProvideCognitoAuth();
+
     return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };

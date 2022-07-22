@@ -46,37 +46,80 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { jsx as _jsx } from "react/jsx-runtime";
-import { AuthContext, useProvideAuth } from "./index";
-import { Auth } from 'aws-amplify';
-var CognitoAuthService = /** @class */ (function () {
-    function CognitoAuthService() {
-    }
-    CognitoAuthService.prototype.getAccessToken = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var session, token;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, Auth.currentSession()];
+import { useEffect, useState } from 'react';
+import { Auth, Hub } from 'aws-amplify';
+import { AuthContext } from './auth';
+export var CognitoAuth = Auth;
+var useProvideCognitoAuth = function () {
+    var _a = useState(null), user = _a[0], setUser = _a[1];
+    useEffect(function () {
+        var authListener = function () {
+            checkUser().catch();
+        };
+        authListener();
+        Hub.listen('auth', authListener);
+        return function () {
+            Hub.remove('auth', authListener);
+        };
+    }, []);
+    var checkUser = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var cognitoUser, authUser, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, Auth.currentAuthenticatedUser()];
+                case 1:
+                    cognitoUser = _a.sent();
+                    if (cognitoUser) {
+                        authUser = {
+                            email: cognitoUser.getUsername(),
+                            username: cognitoUser.getUsername(),
+                        };
+                        setUser(authUser);
+                    }
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_1 = _a.sent();
+                    setUser(null);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); };
+    var signIn = function (_a) {
+        var username = _a.username, password = _a.password;
+        return __awaiter(void 0, void 0, void 0, function () {
+            var cognitoUser, authUser;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, CognitoAuth.signIn({ username: username, password: password })];
                     case 1:
-                        session = _a.sent();
-                        token = session.getAccessToken();
-                        return [2 /*return*/, token.getJwtToken()];
+                        cognitoUser = _b.sent();
+                        if (!((cognitoUser === null || cognitoUser === void 0 ? void 0 : cognitoUser.challengeName) === 'NEW_PASSWORD_REQUIRED')) return [3 /*break*/, 3];
+                        return [4 /*yield*/, CognitoAuth.completeNewPassword(cognitoUser, password)];
+                    case 2:
+                        _b.sent();
+                        return [2 /*return*/, Promise.reject('New password confirmed.')];
+                    case 3:
+                        authUser = {
+                            username: username,
+                            email: cognitoUser.getUsername(),
+                        };
+                        return [2 /*return*/, Promise.resolve(authUser)];
                 }
             });
         });
     };
-    CognitoAuthService.prototype.signIn = function (credentials) {
-        return Auth.signIn(credentials.username, credentials.password, credentials.clientMetadata);
+    var signOut = function () { return CognitoAuth.signOut(); };
+    return {
+        user: user,
+        signIn: signIn,
+        signOut: signOut,
     };
-    CognitoAuthService.prototype.signOut = function () {
-        return Auth.signOut();
-    };
-    return CognitoAuthService;
-}());
-export { CognitoAuthService };
+};
 export var CognitoAuthProvider = function (_a) {
     var children = _a.children;
-    var authService = new CognitoAuthService();
-    var auth = useProvideAuth(authService);
+    var auth = useProvideCognitoAuth();
     return _jsx(AuthContext.Provider, __assign({ value: auth }, { children: children }));
 };

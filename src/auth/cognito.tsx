@@ -7,6 +7,7 @@ export const CognitoAuth = Auth;
 
 const useProvideCognitoAuth = (): AuthContextState => {
     const [user, setUser] = useState<AuthUser | null>(null);
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
         const authListener = () => {
@@ -37,9 +38,12 @@ const useProvideCognitoAuth = (): AuthContextState => {
         } catch (error) {
             setUser(null);
         }
+
+        setLoading(false);
     };
 
     const signIn = async ({username, password}: SignInCredentials): Promise<AuthUser> => {
+        setLoading(true);
         const cognitoUser: CognitoUser = await CognitoAuth.signIn({username, password});
 
         if (cognitoUser?.challengeName === 'NEW_PASSWORD_REQUIRED') {
@@ -49,16 +53,22 @@ const useProvideCognitoAuth = (): AuthContextState => {
 
         const authUser: AuthUser = {
             username,
-            email: cognitoUser.getUsername(),
+            email: cognitoUser.getUsername()
         };
+
+        setLoading(false);
 
         return Promise.resolve(authUser);
     };
 
-    const signOut = () => CognitoAuth.signOut();
+    const signOut = (): Promise<void> => {
+        setLoading(true);
+        return CognitoAuth.signOut().then(() => setLoading(false));
+    }
 
     return {
         user,
+        isLoading,
         signIn,
         signOut,
     };

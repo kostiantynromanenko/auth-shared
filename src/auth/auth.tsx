@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, {createContext, useContext} from 'react';
 import {Navigate, useLocation} from "react-router-dom";
 
 export interface AuthUser {
@@ -16,24 +16,35 @@ export interface SignInCredentials {
 
 export interface AuthContextState {
     user: AuthUser | null;
+    isLoading: boolean;
     signIn: (credentials: SignInCredentials) => Promise<unknown>;
     signOut: () => Promise<unknown>;
 }
 
 export const AuthContext = createContext<AuthContextState>({
     user: null,
+    isLoading: true,
     signIn: () => Promise.resolve(),
     signOut: () => Promise.resolve(),
 });
 
 export const useAuth = () => useContext(AuthContext);
 
-export const RequiresAuth = ({children}: { children: JSX.Element}) => {
-    const {user} = useAuth();
+export interface RequiresAuthProps {
+    children: JSX.Element,
+    fallback: JSX.Element
+}
+
+export const RequiresAuth = ({ children, fallback }: RequiresAuthProps) => {
+    const {user, isLoading} = useAuth();
     const location = useLocation();
 
+    if (isLoading) {
+        return fallback;
+    }
+
     if (!user) {
-        return <Navigate to="/" state={{ from: location }} replace />;
+        return <Navigate to="/" state={{from: location}} replace/>;
     }
 
     return children;

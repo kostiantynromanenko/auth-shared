@@ -1,8 +1,7 @@
 import React, {ReactNode, useEffect, useState} from 'react';
 import {Auth, Hub} from 'aws-amplify';
 import {CognitoUser} from 'amazon-cognito-identity-js';
-import {Redirect, useLocation} from 'react-router-dom';
-import {AuthContext, AuthContextState, AuthUser, SignInCredentials, useAuth} from './auth';
+import {AuthContext, AuthContextState, AuthUser, SignInCredentials} from './auth';
 
 export const CognitoAuth = Auth;
 
@@ -69,15 +68,4 @@ export const CognitoAuthProvider = ({children}: { children: ReactNode }) => {
     const auth = useProvideCognitoAuth();
 
     return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
-};
-
-export const RequiresAuth = ({children}: { children: JSX.Element | JSX.Element[] }) => {
-    const {user} = useAuth();
-    const location = useLocation();
-
-    if (!user) {
-        return <Redirect to={{pathname: "/", state: {from: location}}} />
-    }
-
-    return children;
 };

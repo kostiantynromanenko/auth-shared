@@ -1,4 +1,5 @@
-import { createContext, useContext } from 'react';
+import React, { createContext, useContext } from 'react';
+import {Redirect, useLocation} from "react-router-dom";
 
 export interface AuthUser {
     username: string;
@@ -26,3 +27,14 @@ export const AuthContext = createContext<AuthContextState>({
 });
 
 export const useAuth = () => useContext(AuthContext);
+
+export const RequiresAuth = ({children}: { children: JSX.Element}) => {
+    const {user} = useAuth();
+    const location = useLocation();
+
+    if (!user) {
+        return <Redirect to={{pathname: "/", state: {from: location}}} />
+    }
+
+    return children;
+};

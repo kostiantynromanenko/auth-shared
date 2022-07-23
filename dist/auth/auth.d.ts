@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import React from 'react';
 export interface AuthUser {
     username: string;
     email: string;
@@ -15,5 +15,8 @@ export interface AuthContextState {
     signIn: (credentials: SignInCredentials) => Promise<unknown>;
     signOut: () => Promise<unknown>;
 }
-export declare const AuthContext: import("react").Context<AuthContextState>;
+export declare const AuthContext: React.Context<AuthContextState>;
 export declare const useAuth: () => AuthContextState;
+export declare const RequiresAuth: ({ children }: {
+    children: JSX.Element;
+}) => JSX.Element;

@@ -26,5 +26,5 @@ export interface RequiresAuthProps {
 interface PrivateRouteProps extends RouteProps {
     fallback: JSX.Element;
 }
-export declare const PrivateRoute: ({ fallback, children, ...rest }: PrivateRouteProps) => JSX.Element;
+export declare const PrivateRoute: ({ fallback, element, children, ...rest }: PrivateRouteProps) => JSX.Element;
 export {};

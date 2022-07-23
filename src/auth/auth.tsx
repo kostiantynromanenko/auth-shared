@@ -39,11 +39,11 @@ interface PrivateRouteProps extends RouteProps {
     fallback: JSX.Element;
 }
 
-export const PrivateRoute = ({fallback, children, ...rest}: PrivateRouteProps) => {
+export const PrivateRoute = ({fallback, element, children, ...rest}: PrivateRouteProps) => {
     const {user, isLoading} = useAuth();
     const location = useLocation();
 
-    let routeContent = children;
+    let routeContent = element ?? children;
 
     if (isLoading) {
         routeContent = fallback;

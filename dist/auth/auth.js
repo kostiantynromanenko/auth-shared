@@ -31,10 +31,10 @@ export var AuthContext = createContext({
 });
 export var useAuth = function () { return useContext(AuthContext); };
 export var PrivateRoute = function (_a) {
-    var fallback = _a.fallback, children = _a.children, rest = __rest(_a, ["fallback", "children"]);
+    var fallback = _a.fallback, element = _a.element, children = _a.children, rest = __rest(_a, ["fallback", "element", "children"]);
     var _b = useAuth(), user = _b.user, isLoading = _b.isLoading;
     var location = useLocation();
-    var routeContent = children;
+    var routeContent = element !== null && element !== void 0 ? element : children;
     if (isLoading) {
         routeContent = fallback;
     }

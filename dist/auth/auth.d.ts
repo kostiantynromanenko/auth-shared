@@ -1,4 +1,5 @@
 import React from 'react';
+import { RouteProps } from "react-router-dom";
 export interface AuthUser {
     username: string;
     email: string;
@@ -22,4 +23,8 @@ export interface RequiresAuthProps {
     children: JSX.Element;
     fallback: JSX.Element;
 }
-export declare const RequiresAuth: ({ children, fallback }: RequiresAuthProps) => JSX.Element;
+interface PrivateRouteProps extends RouteProps {
+    fallback: JSX.Element;
+}
+export declare const PrivateRoute: ({ fallback, children, ...rest }: PrivateRouteProps) => JSX.Element;
+export {};

@@ -1,5 +1,5 @@
 import React, {createContext, useContext} from 'react';
-import {Navigate, useLocation} from "react-router-dom";
+import {Navigate, Route, RouteProps, useLocation} from "react-router-dom";
 
 export interface AuthUser {
     username: string;
@@ -35,17 +35,23 @@ export interface RequiresAuthProps {
     fallback: JSX.Element
 }
 
-export const RequiresAuth = ({ children, fallback }: RequiresAuthProps) => {
+interface PrivateRouteProps extends RouteProps {
+    fallback: JSX.Element;
+}
+
+export const PrivateRoute = ({fallback, children, ...rest}: PrivateRouteProps) => {
     const {user, isLoading} = useAuth();
     const location = useLocation();
 
+    let routeContent = children;
+
     if (isLoading) {
-        return fallback;
+        routeContent = fallback;
     }
 
     if (!user) {
-        return <Navigate to="/" state={{from: location}} replace/>;
+        routeContent = <Navigate to="/" state={{from: location}} replace/>;
     }
 
-    return children;
-};
+    return <Route {...rest} element={routeContent}/>
+}

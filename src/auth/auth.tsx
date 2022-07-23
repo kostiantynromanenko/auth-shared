@@ -32,26 +32,21 @@ export const useAuth = () => useContext(AuthContext);
 
 export interface RequiresAuthProps {
     children: JSX.Element,
-    fallback: JSX.Element
+    fallback: JSX.Element,
+    noAuthRedirectPath?: string
 }
 
-interface PrivateRouteProps extends RouteProps {
-    fallback: JSX.Element;
-}
-
-export const PrivateRoute = ({fallback, element, children, ...rest}: PrivateRouteProps) => {
+export const RequiresAuth = ({ children, noAuthRedirectPath = '/', fallback }: RequiresAuthProps) => {
     const {user, isLoading} = useAuth();
     const location = useLocation();
 
-    let routeContent = element ?? children;
-
     if (isLoading) {
-        routeContent = fallback;
+        return fallback;
     }
 
     if (!user) {
-        routeContent = <Navigate to="/" state={{from: location}} replace/>;
+        return <Navigate to={noAuthRedirectPath} state={{from: location}} replace/>;
     }
 
-    return <Route {...rest} element={routeContent}/>
+    return children;
 }

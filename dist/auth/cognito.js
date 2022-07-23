@@ -124,7 +124,7 @@ export var CognitoAuthProvider = function (_a) {
     var auth = useProvideCognitoAuth();
     return _jsx(AuthContext.Provider, __assign({ value: auth }, { children: children }));
 };
-var RequiresAuth = function (_a) {
+export var RequiresAuth = function (_a) {
     var children = _a.children;
     var user = useAuth().user;
     var location = useLocation();
@@ -133,4 +133,3 @@ var RequiresAuth = function (_a) {
     }
     return children;
 };
-export default RequiresAuth;

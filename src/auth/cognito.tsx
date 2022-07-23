@@ -71,7 +71,7 @@ export const CognitoAuthProvider = ({children}: { children: ReactNode }) => {
     return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
 
-const RequiresAuth = ({children}: { children: ReactNode | ReactNode[] }) => {
+export const RequiresAuth = ({children}: { children: JSX.Element | JSX.Element[] }) => {
     const {user} = useAuth();
     const location = useLocation();
 
@@ -81,5 +81,3 @@ const RequiresAuth = ({children}: { children: ReactNode | ReactNode[] }) => {
 
     return children;
 };
-
-export default RequiresAuth;

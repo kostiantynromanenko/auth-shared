@@ -1,7 +1,8 @@
-import React, { ReactNode, useEffect, useState } from 'react';
-import { Auth, Hub } from 'aws-amplify';
-import { AuthContext, AuthContextState, AuthUser, SignInCredentials } from './auth';
-import { CognitoUser } from 'amazon-cognito-identity-js';
+import React, {ReactNode, useEffect, useState} from 'react';
+import {Auth, Hub} from 'aws-amplify';
+import {CognitoUser} from 'amazon-cognito-identity-js';
+import {Redirect, useLocation} from 'react-router-dom';
+import {AuthContext, AuthContextState, AuthUser, SignInCredentials, useAuth} from './auth';
 
 export const CognitoAuth = Auth;
 
@@ -39,8 +40,8 @@ const useProvideCognitoAuth = (): AuthContextState => {
         }
     };
 
-    const signIn = async ({ username, password }: SignInCredentials): Promise<AuthUser> => {
-        const cognitoUser: CognitoUser = await CognitoAuth.signIn({ username, password });
+    const signIn = async ({username, password}: SignInCredentials): Promise<AuthUser> => {
+        const cognitoUser: CognitoUser = await CognitoAuth.signIn({username, password});
 
         if (cognitoUser?.challengeName === 'NEW_PASSWORD_REQUIRED') {
             await CognitoAuth.completeNewPassword(cognitoUser, password);
@@ -64,8 +65,21 @@ const useProvideCognitoAuth = (): AuthContextState => {
     };
 };
 
-export const CognitoAuthProvider = ({ children }: { children: ReactNode }) => {
+export const CognitoAuthProvider = ({children}: { children: ReactNode }) => {
     const auth = useProvideCognitoAuth();
 
     return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
+
+const RequiresAuth = ({children}: { children: ReactNode | ReactNode[] }) => {
+    const {user} = useAuth();
+    const location = useLocation();
+
+    if (!user) {
+        return <Redirect to={{pathname: "/", state: {from: location}}} />
+    }
+
+    return children;
+};
+
+export default RequiresAuth;

@@ -48,7 +48,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import { jsx as _jsx } from "react/jsx-runtime";
 import { useEffect, useState } from 'react';
 import { Auth, Hub } from 'aws-amplify';
-import { AuthContext } from './auth';
+import { Redirect, useLocation } from 'react-router-dom';
+import { AuthContext, useAuth } from './auth';
 export var CognitoAuth = Auth;
 var useProvideCognitoAuth = function () {
     var _a = useState(null), user = _a[0], setUser = _a[1];
@@ -123,3 +124,13 @@ export var CognitoAuthProvider = function (_a) {
     var auth = useProvideCognitoAuth();
     return _jsx(AuthContext.Provider, __assign({ value: auth }, { children: children }));
 };
+var RequiresAuth = function (_a) {
+    var children = _a.children;
+    var user = useAuth().user;
+    var location = useLocation();
+    if (!user) {
+        return _jsx(Redirect, { to: { pathname: "/", state: { from: location } } });
+    }
+    return children;
+};
+export default RequiresAuth;

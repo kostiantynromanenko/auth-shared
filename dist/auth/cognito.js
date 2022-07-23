@@ -52,6 +52,7 @@ import { AuthContext } from './auth';
 export var CognitoAuth = Auth;
 var useProvideCognitoAuth = function () {
     var _a = useState(null), user = _a[0], setUser = _a[1];
+    var _b = useState(true), isLoading = _b[0], setLoading = _b[1];
     useEffect(function () {
         var authListener = function () {
             checkUser().catch();
@@ -83,7 +84,9 @@ var useProvideCognitoAuth = function () {
                     error_1 = _a.sent();
                     setUser(null);
                     return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
+                case 3:
+                    setLoading(false);
+                    return [2 /*return*/];
             }
         });
     }); };
@@ -93,7 +96,9 @@ var useProvideCognitoAuth = function () {
             var cognitoUser, authUser;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, CognitoAuth.signIn({ username: username, password: password })];
+                    case 0:
+                        setLoading(true);
+                        return [4 /*yield*/, CognitoAuth.signIn({ username: username, password: password })];
                     case 1:
                         cognitoUser = _b.sent();
                         if (!((cognitoUser === null || cognitoUser === void 0 ? void 0 : cognitoUser.challengeName) === 'NEW_PASSWORD_REQUIRED')) return [3 /*break*/, 3];
@@ -104,16 +109,21 @@ var useProvideCognitoAuth = function () {
                     case 3:
                         authUser = {
                             username: username,
-                            email: cognitoUser.getUsername(),
+                            email: cognitoUser.getUsername()
                         };
+                        setLoading(false);
                         return [2 /*return*/, Promise.resolve(authUser)];
                 }
             });
         });
     };
-    var signOut = function () { return CognitoAuth.signOut(); };
+    var signOut = function () {
+        setLoading(true);
+        return CognitoAuth.signOut().then(function () { return setLoading(false); });
+    };
     return {
         user: user,
+        isLoading: isLoading,
         signIn: signIn,
         signOut: signOut,
     };

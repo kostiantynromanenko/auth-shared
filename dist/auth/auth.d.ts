@@ -12,11 +12,14 @@ export interface SignInCredentials {
 }
 export interface AuthContextState {
     user: AuthUser | null;
+    isLoading: boolean;
     signIn: (credentials: SignInCredentials) => Promise<unknown>;
     signOut: () => Promise<unknown>;
 }
 export declare const AuthContext: React.Context<AuthContextState>;
 export declare const useAuth: () => AuthContextState;
-export declare const RequiresAuth: ({ children }: {
+export interface RequiresAuthProps {
     children: JSX.Element;
-}) => JSX.Element;
+    fallback: JSX.Element;
+}
+export declare const RequiresAuth: ({ children, fallback }: RequiresAuthProps) => JSX.Element;

@@ -36,7 +36,7 @@ export interface RequiresAuthProps {
     noAuthRedirectPath?: string
 }
 
-export const RequiresAuth = ({ children, noAuthRedirectPath, fallback }: RequiresAuthProps) => {
+export const RequiresAuth = ({ children, signOutPath, fallback }: RequiresAuthProps) => {
     const {user, isLoading} = useAuth();
     const location = useLocation();
 
@@ -45,7 +45,7 @@ export const RequiresAuth = ({ children, noAuthRedirectPath, fallback }: Require
     }
 
     if (!user) {
-        return <Navigate to={noAuthRedirectPath || '/'} state={{from: location}} replace/>;
+        return <Navigate to={signOutPath || '/login'} state={{from: location}} replace/>;
     }
 
     return children;

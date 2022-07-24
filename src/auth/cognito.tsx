@@ -8,11 +8,15 @@ export const CognitoAuth = Auth;
 
 const useProvideCognitoAuth = (): AuthContextState => {
     const [user, setUser] = useState<AuthUser | null>(null);
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
         Hub.listen('auth', authCallback);
 
-        getUser().then((authUser) => setUser(authUser));
+        getUser().then((authUser) => {
+            setUser(authUser);
+            setLoading(false);
+        });
 
         return (): void => {
             Hub.remove('auth', authCallback);
@@ -20,6 +24,8 @@ const useProvideCognitoAuth = (): AuthContextState => {
     }, []);
 
     const authCallback: HubCallback = ({payload}) => {
+        setLoading(true);
+
         switch (payload.event) {
             case 'signIn':
             case 'cognitoHostedUI':
@@ -33,6 +39,8 @@ const useProvideCognitoAuth = (): AuthContextState => {
                 setUser(null);
                 break;
         }
+
+        setLoading(false);
     }
 
     const getUser = (): Promise<AuthUser> => {
@@ -58,12 +66,11 @@ const useProvideCognitoAuth = (): AuthContextState => {
         return Promise.resolve(authUser);
     };
 
-    const signOut = (): Promise<void> => {
-        return CognitoAuth.signOut();
-    }
+    const signOut = (): Promise<void> => CognitoAuth.signOut();
 
     return {
         user,
+        isLoading,
         signIn,
         signOut,
     };

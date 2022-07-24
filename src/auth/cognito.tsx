@@ -2,6 +2,7 @@ import React, {ReactNode, useEffect, useState} from 'react';
 import {Auth, Hub} from 'aws-amplify';
 import {CognitoUser} from 'amazon-cognito-identity-js';
 import {AuthContext, AuthContextState, AuthUser, SignInCredentials} from './auth';
+import {HubCallback} from "@aws-amplify/core/src/Hub";
 
 export const CognitoAuth = Auth;
 
@@ -10,32 +11,31 @@ const useProvideCognitoAuth = (): AuthContextState => {
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
-        Hub.listen('auth', ({ payload }) => {
-            switch (payload.event) {
-                case 'signIn':
-                case 'cognitoHostedUI':
-                    console.log('Authenticated...');
-                    console.log(payload.data);
-                    break;
-                case 'signIn_failure':
-                case 'cognitoHostedUI_failure':
-                    console.log('Error', payload.data);
-                    break;
-            }
-        });
+        Hub.listen('auth', authCallback);
 
-        // const authListener = () => {
-        //     checkUser().catch();
-        // };
-        //
-        // authListener();
-        //
-        // Hub.listen('auth', authListener);
-        //
-        // return (): void => {
-        //     Hub.remove('auth', authListener);
-        // };
+        return (): void => {
+            Hub.remove('auth', authCallback);
+        };
     }, []);
+
+    const authCallback: HubCallback = ({ payload }) => {
+        switch (payload.event) {
+            case 'signIn':
+            case 'cognitoHostedUI': {
+                const authUser: AuthUser = {
+                    email: payload.data.getUsername(),
+                    username: payload.data.getUsername(),
+                };
+                setUser(authUser);
+            } break;
+            case 'signIn_failure':
+            case 'cognitoHostedUI_failure':
+                console.log('Error', payload.data);
+                break;
+        }
+
+        setLoading(false);
+    }
 
     // const checkUser = async (): Promise<void> => {
     //     try {

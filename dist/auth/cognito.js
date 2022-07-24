@@ -54,32 +54,31 @@ var useProvideCognitoAuth = function () {
     var _a = useState(null), user = _a[0], setUser = _a[1];
     var _b = useState(true), isLoading = _b[0], setLoading = _b[1];
     useEffect(function () {
-        Hub.listen('auth', function (_a) {
-            var payload = _a.payload;
-            switch (payload.event) {
-                case 'signIn':
-                case 'cognitoHostedUI':
-                    console.log('Authenticated...');
-                    console.log(payload.data);
-                    break;
-                case 'signIn_failure':
-                case 'cognitoHostedUI_failure':
-                    console.log('Error', payload.data);
-                    break;
-            }
-        });
-        // const authListener = () => {
-        //     checkUser().catch();
-        // };
-        //
-        // authListener();
-        //
-        // Hub.listen('auth', authListener);
-        //
-        // return (): void => {
-        //     Hub.remove('auth', authListener);
-        // };
+        Hub.listen('auth', authCallback);
+        return function () {
+            Hub.remove('auth', authCallback);
+        };
     }, []);
+    var authCallback = function (_a) {
+        var payload = _a.payload;
+        switch (payload.event) {
+            case 'signIn':
+            case 'cognitoHostedUI':
+                {
+                    var authUser = {
+                        email: payload.data.getUsername(),
+                        username: payload.data.getUsername(),
+                    };
+                    setUser(authUser);
+                }
+                break;
+            case 'signIn_failure':
+            case 'cognitoHostedUI_failure':
+                console.log('Error', payload.data);
+                break;
+        }
+        setLoading(false);
+    };
     // const checkUser = async (): Promise<void> => {
     //     try {
     //         const cognitoUser: CognitoUser = await Auth.currentAuthenticatedUser();

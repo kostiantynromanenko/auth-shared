@@ -23,4 +23,4 @@ export interface RequiresAuthProps {
     fallback: JSX.Element;
     noAuthRedirectPath?: string;
 }
-export declare const RequiresAuth: ({ children, noAuthRedirectPath, fallback }: RequiresAuthProps) => JSX.Element;
+export declare const RequiresAuth: ({ children, signOutPath, fallback }: RequiresAuthProps) => JSX.Element;

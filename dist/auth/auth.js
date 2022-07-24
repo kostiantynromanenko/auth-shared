@@ -9,14 +9,14 @@ export var AuthContext = createContext({
 });
 export var useAuth = function () { return useContext(AuthContext); };
 export var RequiresAuth = function (_a) {
-    var children = _a.children, noAuthRedirectPath = _a.noAuthRedirectPath, fallback = _a.fallback;
+    var children = _a.children, signOutPath = _a.signOutPath, fallback = _a.fallback;
     var _b = useAuth(), user = _b.user, isLoading = _b.isLoading;
     var location = useLocation();
     if (isLoading) {
         return fallback;
     }
     if (!user) {
-        return _jsx(Navigate, { to: noAuthRedirectPath || '/', state: { from: location }, replace: true });
+        return _jsx(Navigate, { to: signOutPath || '/login', state: { from: location }, replace: true });
     }
     return children;
 };

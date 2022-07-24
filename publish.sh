@@ -1,5 +1,9 @@
 npm version patch
 PACKAGE_VERSION=$(npm show . version)
-echo $PACKAGE_VERSION
+npm run build
+git add .
+git commit -m "update version to $PACKAGE_VERSION"
+git push origin
+npm publish
 
 

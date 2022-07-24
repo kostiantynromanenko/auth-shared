@@ -8,40 +8,41 @@ export const CognitoAuth = Auth;
 
 const useProvideCognitoAuth = (): AuthContextState => {
     const [user, setUser] = useState<AuthUser | null>(null);
-    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
         Hub.listen('auth', authCallback);
+
+        getUser().then((authUser) => setUser(authUser));
 
         return (): void => {
             Hub.remove('auth', authCallback);
         };
     }, []);
 
-    const authCallback: HubCallback = ({ payload }) => {
+    const authCallback: HubCallback = ({payload}) => {
         switch (payload.event) {
             case 'signIn':
-            case 'cognitoHostedUI': {
-                const authUser: AuthUser = {
-                    email: payload.data.getUsername(),
-                    username: payload.data.getUsername(),
-                };
-                setUser(authUser);
-            } break;
+            case 'cognitoHostedUI':
+                getUser().then((authUser) => setUser(authUser));
+                break;
             case 'signIn_failure':
             case 'cognitoHostedUI_failure':
                 console.log('Error', payload.data);
                 break;
-            case 'signOut': {
+            case 'signOut':
                 setUser(null);
-            }
+                break;
         }
+    }
 
-        setLoading(false);
+    const getUser = (): Promise<AuthUser> => {
+        return Auth.currentAuthenticatedUser().then((user: CognitoUser) => ({
+            username: user.getUsername(),
+            email: user.getUsername()
+        }));
     }
 
     const signIn = async ({username, password}: SignInCredentials): Promise<AuthUser> => {
-        setLoading(true);
         const cognitoUser: CognitoUser = await CognitoAuth.signIn({username, password});
 
         if (cognitoUser?.challengeName === 'NEW_PASSWORD_REQUIRED') {
@@ -54,19 +55,15 @@ const useProvideCognitoAuth = (): AuthContextState => {
             email: cognitoUser.getUsername()
         };
 
-        setLoading(false);
-
         return Promise.resolve(authUser);
     };
 
     const signOut = (): Promise<void> => {
-        setLoading(true);
-        return CognitoAuth.signOut().then(() => setLoading(false));
+        return CognitoAuth.signOut();
     }
 
     return {
         user,
-        isLoading,
         signIn,
         signOut,
     };

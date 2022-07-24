@@ -16,14 +16,12 @@ export interface SignInCredentials {
 
 export interface AuthContextState {
     user: AuthUser | null;
-    isLoading: boolean;
     signIn: (credentials: SignInCredentials) => Promise<unknown>;
     signOut: () => Promise<unknown>;
 }
 
 export const AuthContext = createContext<AuthContextState>({
     user: null,
-    isLoading: true,
     signIn: () => Promise.resolve(),
     signOut: () => Promise.resolve(),
 });
@@ -36,13 +34,9 @@ export interface RequiresAuthProps {
     noAuthRedirectPath?: string
 }
 
-export const RequiresAuth = ({ children, signOutPath, fallback }: RequiresAuthProps) => {
-    const {user, isLoading} = useAuth();
+export const RequiresAuth = ({ children, signOutPath }: RequiresAuthProps) => {
+    const {user} = useAuth();
     const location = useLocation();
-
-    if (isLoading) {
-        return fallback;
-    }
 
     if (!user) {
         return <Navigate to={signOutPath || '/login'} state={{from: location}} replace/>;

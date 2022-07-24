@@ -31,7 +31,7 @@ export const useAuth = () => useContext(AuthContext);
 export interface RequiresAuthProps {
     children: JSX.Element,
     fallback: JSX.Element,
-    noAuthRedirectPath?: string
+    signOutPath?: string
 }
 
 export const RequiresAuth = ({ children, signOutPath }: RequiresAuthProps) => {

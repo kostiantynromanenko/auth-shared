@@ -93,3 +93,20 @@ export const CognitoAuthProvider = ({children}: { children: ReactNode }) => {
 
     return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
+
+
+export const listenForAuth = () => {
+    Hub.listen('auth', ({ payload }) => {
+        switch (payload.event) {
+            case 'signIn':
+            case 'cognitoHostedUI':
+                console.log('Authenticated...');
+                console.log(payload.data);
+                break;
+            case 'signIn_failure':
+            case 'cognitoHostedUI_failure':
+                console.log('Error', payload.data);
+                break;
+        }
+    });
+}

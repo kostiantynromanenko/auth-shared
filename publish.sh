@@ -1,3 +1,5 @@
+git add .
+git commit -m "new changes"
 npm version patch
 PACKAGE_VERSION=$(npm show . version)
 npm run build

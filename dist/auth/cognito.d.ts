@@ -3,4 +3,3 @@ export declare const CognitoAuth: import("@aws-amplify/auth/lib-esm/Auth").AuthC
 export declare const CognitoAuthProvider: ({ children }: {
     children: ReactNode;
 }) => JSX.Element;
-export declare const listenForAuth: () => void;

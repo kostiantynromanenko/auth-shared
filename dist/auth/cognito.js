@@ -76,27 +76,12 @@ var useProvideCognitoAuth = function () {
             case 'cognitoHostedUI_failure':
                 console.log('Error', payload.data);
                 break;
+            case 'signOut': {
+                setUser(null);
+            }
         }
         setLoading(false);
     };
-    // const checkUser = async (): Promise<void> => {
-    //     try {
-    //         const cognitoUser: CognitoUser = await Auth.currentAuthenticatedUser();
-    //
-    //         if (cognitoUser) {
-    //             const authUser: AuthUser = {
-    //                 email: cognitoUser.getUsername(),
-    //                 username: cognitoUser.getUsername(),
-    //             };
-    //
-    //             setUser(authUser);
-    //         }
-    //     } catch (error) {
-    //         setUser(null);
-    //     }
-    //
-    //     setLoading(false);
-    // };
     var signIn = function (_a) {
         var username = _a.username, password = _a.password;
         return __awaiter(void 0, void 0, void 0, function () {
@@ -139,20 +124,4 @@ export var CognitoAuthProvider = function (_a) {
     var children = _a.children;
     var auth = useProvideCognitoAuth();
     return _jsx(AuthContext.Provider, __assign({ value: auth }, { children: children }));
-};
-export var listenForAuth = function () {
-    Hub.listen('auth', function (_a) {
-        var payload = _a.payload;
-        switch (payload.event) {
-            case 'signIn':
-            case 'cognitoHostedUI':
-                console.log('Authenticated...');
-                console.log(payload.data);
-                break;
-            case 'signIn_failure':
-            case 'cognitoHostedUI_failure':
-                console.log('Error', payload.data);
-                break;
-        }
-    });
 };

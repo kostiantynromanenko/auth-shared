@@ -10,37 +10,51 @@ const useProvideCognitoAuth = (): AuthContextState => {
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
-        const authListener = () => {
-            checkUser().catch();
-        };
+        Hub.listen('auth', ({ payload }) => {
+            switch (payload.event) {
+                case 'signIn':
+                case 'cognitoHostedUI':
+                    console.log('Authenticated...');
+                    console.log(payload.data);
+                    break;
+                case 'signIn_failure':
+                case 'cognitoHostedUI_failure':
+                    console.log('Error', payload.data);
+                    break;
+            }
+        });
 
-        authListener();
-
-        Hub.listen('auth', authListener);
-
-        return (): void => {
-            Hub.remove('auth', authListener);
-        };
+        // const authListener = () => {
+        //     checkUser().catch();
+        // };
+        //
+        // authListener();
+        //
+        // Hub.listen('auth', authListener);
+        //
+        // return (): void => {
+        //     Hub.remove('auth', authListener);
+        // };
     }, []);
 
-    const checkUser = async (): Promise<void> => {
-        try {
-            const cognitoUser: CognitoUser = await Auth.currentAuthenticatedUser();
-
-            if (cognitoUser) {
-                const authUser: AuthUser = {
-                    email: cognitoUser.getUsername(),
-                    username: cognitoUser.getUsername(),
-                };
-
-                setUser(authUser);
-            }
-        } catch (error) {
-            setUser(null);
-        }
-
-        setLoading(false);
-    };
+    // const checkUser = async (): Promise<void> => {
+    //     try {
+    //         const cognitoUser: CognitoUser = await Auth.currentAuthenticatedUser();
+    //
+    //         if (cognitoUser) {
+    //             const authUser: AuthUser = {
+    //                 email: cognitoUser.getUsername(),
+    //                 username: cognitoUser.getUsername(),
+    //             };
+    //
+    //             setUser(authUser);
+    //         }
+    //     } catch (error) {
+    //         setUser(null);
+    //     }
+    //
+    //     setLoading(false);
+    // };
 
     const signIn = async ({username, password}: SignInCredentials): Promise<AuthUser> => {
         setLoading(true);

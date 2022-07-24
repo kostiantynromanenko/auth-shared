@@ -1,5 +1,5 @@
 import React, {createContext, useContext} from 'react';
-import {Navigate, Route, RouteProps, useLocation} from "react-router-dom";
+import {Navigate, useLocation} from "react-router-dom";
 
 export interface AuthUser {
     username: string;
@@ -36,7 +36,7 @@ export interface RequiresAuthProps {
     noAuthRedirectPath?: string
 }
 
-export const RequiresAuth = ({ children, noAuthRedirectPath = '/', fallback }: RequiresAuthProps) => {
+export const RequiresAuth = ({ children, noAuthRedirectPath, fallback }: RequiresAuthProps) => {
     const {user, isLoading} = useAuth();
     const location = useLocation();
 
@@ -45,7 +45,7 @@ export const RequiresAuth = ({ children, noAuthRedirectPath = '/', fallback }: R
     }
 
     if (!user) {
-        return <Navigate to={noAuthRedirectPath} state={{from: location}} replace/>;
+        return <Navigate to={noAuthRedirectPath || '/'} state={{from: location}} replace/>;
     }
 
     return children;

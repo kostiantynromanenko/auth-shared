@@ -52,15 +52,20 @@ import { AuthContext } from './auth';
 export var CognitoAuth = Auth;
 var useProvideCognitoAuth = function () {
     var _a = useState(null), user = _a[0], setUser = _a[1];
+    var _b = useState(true), isLoading = _b[0], setLoading = _b[1];
     useEffect(function () {
         Hub.listen('auth', authCallback);
-        getUser().then(function (authUser) { return setUser(authUser); });
+        getUser().then(function (authUser) {
+            setUser(authUser);
+            setLoading(false);
+        });
         return function () {
             Hub.remove('auth', authCallback);
         };
     }, []);
     var authCallback = function (_a) {
         var payload = _a.payload;
+        setLoading(true);
         switch (payload.event) {
             case 'signIn':
             case 'cognitoHostedUI':
@@ -74,6 +79,7 @@ var useProvideCognitoAuth = function () {
                 setUser(null);
                 break;
         }
+        setLoading(false);
     };
     var getUser = function () {
         return Auth.currentAuthenticatedUser().then(function (user) { return ({
@@ -105,11 +111,10 @@ var useProvideCognitoAuth = function () {
             });
         });
     };
-    var signOut = function () {
-        return CognitoAuth.signOut();
-    };
+    var signOut = function () { return CognitoAuth.signOut(); };
     return {
         user: user,
+        isLoading: isLoading,
         signIn: signIn,
         signOut: signOut,
     };

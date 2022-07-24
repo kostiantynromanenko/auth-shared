@@ -12,6 +12,7 @@ export interface SignInCredentials {
 }
 export interface AuthContextState {
     user: AuthUser | null;
+    isLoading: boolean;
     signIn: (credentials: SignInCredentials) => Promise<unknown>;
     signOut: () => Promise<unknown>;
 }
@@ -22,4 +23,4 @@ export interface RequiresAuthProps {
     fallback: JSX.Element;
     signOutPath?: string;
 }
-export declare const RequiresAuth: ({ children, signOutPath }: RequiresAuthProps) => JSX.Element;
+export declare const RequiresAuth: ({ children, fallback, signOutPath }: RequiresAuthProps) => JSX.Element;

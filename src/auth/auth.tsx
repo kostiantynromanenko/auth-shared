@@ -50,7 +50,7 @@ export const withAuth = <T extends WithAuthProps = WithAuthProps>(
 
 export interface RequiresAuthProps {
     children: JSX.Element,
-    fallback: JSX.Element,
+    fallback?: JSX.Element,
     signOutPath?: string
 }
 
@@ -59,7 +59,7 @@ export const ProtectedRoute = ({ children, fallback, signOutPath }: RequiresAuth
     const location = useLocation();
 
     if (isLoading) {
-        return fallback;
+        return fallback || <div>Loading...</div>;
     }
 
     if (!user) {

@@ -50,3 +50,24 @@ export const RequiresAuth = ({ children, fallback, signOutPath }: RequiresAuthPr
 
     return children;
 }
+
+export interface WithAuthProps {
+    user: AuthUser | null;
+}
+
+export const withAuth = <T extends WithAuthProps = WithAuthProps>(
+    WrappedComponent: React.ComponentType<T>
+) => {
+    const displayName =
+        WrappedComponent.displayName || "Component";
+
+    const ComponentWithTheme = (props: Omit<T, keyof WithAuthProps>) => {
+        const { user } = useAuth();
+
+        return <WrappedComponent user={user} {...(props as T)} />;
+    };
+
+    ComponentWithTheme.displayName = `withAuth(${displayName})`;
+
+    return ComponentWithTheme;
+}

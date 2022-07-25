@@ -55,6 +55,17 @@ const useProvideCognitoAuth = (): AuthContextState => {
     };
 };
 
+export const checkSession = async (): Promise<void> => {
+    try {
+        const user = await CognitoAuth.currentAuthenticatedUser();
+        if (!user) {
+            await CognitoAuth.federatedSignIn();
+        }
+    } catch(e) {
+        await CognitoAuth.federatedSignIn();
+    }
+}
+
 export const CognitoAuthProvider = ({children}: { children: ReactNode }) => {
     const auth = useProvideCognitoAuth();
 

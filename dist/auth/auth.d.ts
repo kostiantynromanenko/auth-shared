@@ -26,7 +26,7 @@ export declare const withAuth: <T extends WithAuthProps = WithAuthProps>(Wrapped
 };
 export interface RequiresAuthProps {
     children: JSX.Element;
-    fallback: JSX.Element;
+    fallback?: JSX.Element;
     signOutPath?: string;
 }
 export declare const ProtectedRoute: ({ children, fallback, signOutPath }: RequiresAuthProps) => JSX.Element;

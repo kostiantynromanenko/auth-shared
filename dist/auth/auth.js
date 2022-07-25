@@ -33,7 +33,7 @@ export var ProtectedRoute = function (_a) {
     var _b = useAuth(), user = _b.user, isLoading = _b.isLoading;
     var location = useLocation();
     if (isLoading) {
-        return fallback;
+        return fallback || _jsx("div", { children: "Loading..." });
     }
     if (!user) {
         return _jsx(Navigate, { to: signOutPath || '/login', state: { from: location }, replace: true });

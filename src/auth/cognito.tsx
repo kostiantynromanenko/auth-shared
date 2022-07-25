@@ -10,6 +10,9 @@ const useProvideCognitoAuth = (): AuthContextState => {
     const [user, setUser] = useState<AuthUser | null>(null);
     const [isLoading, setLoading] = useState(true);
 
+    console.log(user);
+    console.log(isLoading);
+
     useEffect(() => {
         Hub.listen('auth', authCallback);
 

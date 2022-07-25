@@ -53,25 +53,21 @@ export var CognitoAuth = Auth;
 var useProvideCognitoAuth = function () {
     var _a = useState(null), user = _a[0], setUser = _a[1];
     var _b = useState(true), isLoading = _b[0], setLoading = _b[1];
-    console.log(user);
-    console.log(isLoading);
     useEffect(function () {
         Hub.listen('auth', authCallback);
-        getUser().then(function (authUser) {
-            setUser(authUser);
-            setLoading(false);
-        });
+        defineUser().then();
         return function () {
             Hub.remove('auth', authCallback);
         };
     }, []);
     var authCallback = function (_a) {
         var payload = _a.payload;
+        console.log(payload.event);
         setLoading(true);
         switch (payload.event) {
             case 'signIn':
             case 'cognitoHostedUI':
-                getUser().then(function (authUser) { return setUser(authUser); });
+                defineUser().then();
                 break;
             case 'signIn_failure':
             case 'cognitoHostedUI_failure':
@@ -83,12 +79,25 @@ var useProvideCognitoAuth = function () {
         }
         setLoading(false);
     };
-    var getUser = function () {
-        return Auth.currentAuthenticatedUser().then(function (user) { return ({
-            username: user.getUsername(),
-            email: user.getUsername()
-        }); });
-    };
+    var defineUser = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var cognitoUser, authUser;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    setLoading(true);
+                    return [4 /*yield*/, Auth.currentAuthenticatedUser()];
+                case 1:
+                    cognitoUser = _a.sent();
+                    authUser = {
+                        username: cognitoUser.getUsername(),
+                        email: cognitoUser.getUsername()
+                    };
+                    setUser(authUser);
+                    setLoading(false);
+                    return [2 /*return*/];
+            }
+        });
+    }); };
     var signIn = function (_a) {
         var username = _a.username, password = _a.password;
         return __awaiter(void 0, void 0, void 0, function () {

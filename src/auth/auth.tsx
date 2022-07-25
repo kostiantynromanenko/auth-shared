@@ -54,7 +54,7 @@ export interface RequiresAuthProps {
     signOutPath?: string
 }
 
-export const RequiresAuth = ({ children, fallback, signOutPath }: RequiresAuthProps) => {
+export const ProtectedRoute = ({ children, fallback, signOutPath }: RequiresAuthProps) => {
     const {user, isLoading} = useAuth();
     const location = useLocation();
 

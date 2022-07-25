@@ -20,35 +20,25 @@ const useProvideCognitoAuth = (): AuthContextState => {
         };
     }, []);
 
-    const authCallback: HubCallback = ({payload}) => {
-        console.log(payload.event);
-        setLoading(true);
-
-        switch (payload.event) {
-            case 'signIn':
-            case 'cognitoHostedUI':
-                defineUser().then();
-                break;
-            case 'signIn_failure':
-            case 'cognitoHostedUI_failure':
-                console.log('Error', payload.data);
-                break;
-            case 'signOut':
-                setUser(null);
-                break;
-        }
-
-        setLoading(false);
+    const authCallback: HubCallback = async ({payload}) => {
+        await defineUser();
     }
 
     const defineUser = async (): Promise<void> => {
         setLoading(true);
+
         const cognitoUser: CognitoUser = await Auth.currentAuthenticatedUser();
-        const authUser: AuthUser = {
-            username: cognitoUser.getUsername(),
-            email: cognitoUser.getUsername()
+
+        if (cognitoUser) {
+            const authUser: AuthUser = {
+                username: cognitoUser.getUsername(),
+                email: cognitoUser.getUsername()
+            }
+            setUser(authUser);
+        } else {
+            setUser(null);
         }
-        setUser(authUser);
+
         setLoading(false);
     }
 

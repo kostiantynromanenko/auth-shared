@@ -54,32 +54,18 @@ var useProvideCognitoAuth = function () {
     var _a = useState(null), user = _a[0], setUser = _a[1];
     var _b = useState(true), isLoading = _b[0], setLoading = _b[1];
     useEffect(function () {
-        Hub.listen('auth', authCallback);
-        defineUser().then();
+        Hub.listen('auth', function () { return checkUser(); });
+        checkUser().then();
         return function () {
-            Hub.remove('auth', authCallback);
+            Hub.remove('auth', function () { return checkUser(); });
         };
     }, []);
-    var authCallback = function (_a) {
-        var payload = _a.payload;
-        return __awaiter(void 0, void 0, void 0, function () {
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        console.log('Hub event: ' + payload.event);
-                        return [4 /*yield*/, defineUser()];
-                    case 1:
-                        _b.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    var defineUser = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var cognitoUser, authUser;
+    var checkUser = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var cognitoUser, authUser, e_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
+                    _a.trys.push([0, 2, 3, 4]);
                     setLoading(true);
                     return [4 /*yield*/, Auth.currentAuthenticatedUser()];
                 case 1:
@@ -94,32 +80,23 @@ var useProvideCognitoAuth = function () {
                     else {
                         setUser(null);
                     }
+                    return [3 /*break*/, 4];
+                case 2:
+                    e_1 = _a.sent();
+                    setUser(null);
+                    return [3 /*break*/, 4];
+                case 3:
                     setLoading(false);
-                    return [2 /*return*/];
+                    return [7 /*endfinally*/];
+                case 4: return [2 /*return*/];
             }
         });
     }); };
     var signIn = function (_a) {
         var username = _a.username, password = _a.password;
         return __awaiter(void 0, void 0, void 0, function () {
-            var cognitoUser, authUser;
             return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0: return [4 /*yield*/, CognitoAuth.signIn({ username: username, password: password })];
-                    case 1:
-                        cognitoUser = _b.sent();
-                        if (!((cognitoUser === null || cognitoUser === void 0 ? void 0 : cognitoUser.challengeName) === 'NEW_PASSWORD_REQUIRED')) return [3 /*break*/, 3];
-                        return [4 /*yield*/, CognitoAuth.completeNewPassword(cognitoUser, password)];
-                    case 2:
-                        _b.sent();
-                        return [2 /*return*/, Promise.reject('New password confirmed.')];
-                    case 3:
-                        authUser = {
-                            username: username,
-                            email: cognitoUser.getUsername()
-                        };
-                        return [2 /*return*/, Promise.resolve(authUser)];
-                }
+                return [2 /*return*/, CognitoAuth.signIn({ username: username, password: password })];
             });
         });
     };

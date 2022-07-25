@@ -53,6 +53,8 @@ export var CognitoAuth = Auth;
 var useProvideCognitoAuth = function () {
     var _a = useState(null), user = _a[0], setUser = _a[1];
     var _b = useState(true), isLoading = _b[0], setLoading = _b[1];
+    console.log(user);
+    console.log(isLoading);
     useEffect(function () {
         Hub.listen('auth', authCallback);
         getUser().then(function (authUser) {

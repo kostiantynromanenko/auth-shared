@@ -22,8 +22,8 @@ export var useAuth = function () { return useContext(AuthContext); };
 export var withAuth = function (WrappedComponent) {
     var displayName = WrappedComponent.displayName || "Component";
     var ComponentWithTheme = function (props) {
-        var user = useAuth().user;
-        return _jsx(WrappedComponent, __assign({ user: user }, props));
+        var authProps = useAuth();
+        return _jsx(WrappedComponent, __assign({}, authProps, props));
     };
     ComponentWithTheme.displayName = "withAuth(".concat(displayName, ")");
     return ComponentWithTheme;

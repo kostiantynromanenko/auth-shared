@@ -62,22 +62,16 @@ var useProvideCognitoAuth = function () {
     }, []);
     var authCallback = function (_a) {
         var payload = _a.payload;
-        console.log(payload.event);
-        setLoading(true);
-        switch (payload.event) {
-            case 'signIn':
-            case 'cognitoHostedUI':
-                defineUser().then();
-                break;
-            case 'signIn_failure':
-            case 'cognitoHostedUI_failure':
-                console.log('Error', payload.data);
-                break;
-            case 'signOut':
-                setUser(null);
-                break;
-        }
-        setLoading(false);
+        return __awaiter(void 0, void 0, void 0, function () {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, defineUser()];
+                    case 1:
+                        _b.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     var defineUser = function () { return __awaiter(void 0, void 0, void 0, function () {
         var cognitoUser, authUser;
@@ -88,11 +82,16 @@ var useProvideCognitoAuth = function () {
                     return [4 /*yield*/, Auth.currentAuthenticatedUser()];
                 case 1:
                     cognitoUser = _a.sent();
-                    authUser = {
-                        username: cognitoUser.getUsername(),
-                        email: cognitoUser.getUsername()
-                    };
-                    setUser(authUser);
+                    if (cognitoUser) {
+                        authUser = {
+                            username: cognitoUser.getUsername(),
+                            email: cognitoUser.getUsername()
+                        };
+                        setUser(authUser);
+                    }
+                    else {
+                        setUser(null);
+                    }
                     setLoading(false);
                     return [2 /*return*/];
             }

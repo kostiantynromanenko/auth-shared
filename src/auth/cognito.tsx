@@ -2,10 +2,11 @@ import React, {ReactNode, useEffect, useState} from 'react';
 import {Auth, Hub} from 'aws-amplify';
 import {CognitoUser} from 'amazon-cognito-identity-js';
 import {AuthContext, AuthContextState, AuthUser, SignInCredentials} from './auth';
+import {AuthService} from './auth-service';
 
 export const CognitoAuth = Auth;
 
-const useProvideCognitoAuth = (): AuthContextState => {
+const useProvideAuth = (): AuthContextState => {
     const [user, setUser] = useState<AuthUser | null>(null);
     const [isLoading, setLoading] = useState(true);
 
@@ -67,7 +68,24 @@ export const checkSession = async (): Promise<void> => {
 }
 
 export const CognitoAuthProvider = ({children}: { children: ReactNode }) => {
-    const auth = useProvideCognitoAuth();
+    const auth = useProvideAuth();
 
     return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
+
+export class CognitoAuthService implements AuthService {
+    signIn(): Promise<unknown> {
+        return Promise.resolve();
+    }
+
+    signOut(): Promise<unknown> {
+        return Promise.resolve();
+    }
+
+    checkSession(): Promise<AuthUser> {
+        return CognitoAuth.currentAuthenticatedUser().then((user: CognitoUser) => ({
+            username: user.getUsername(),
+            email: user.getUsername()
+        }));
+    }
+}

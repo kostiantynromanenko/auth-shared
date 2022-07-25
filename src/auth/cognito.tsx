@@ -10,16 +10,10 @@ const useProvideCognitoAuth = (): AuthContextState => {
     const [user, setUser] = useState<AuthUser | null>(null);
     const [isLoading, setLoading] = useState(true);
 
-    console.log(user);
-    console.log(isLoading);
-
     useEffect(() => {
         Hub.listen('auth', authCallback);
 
-        getUser().then((authUser) => {
-            setUser(authUser);
-            setLoading(false);
-        });
+        defineUser().then();
 
         return (): void => {
             Hub.remove('auth', authCallback);
@@ -27,12 +21,13 @@ const useProvideCognitoAuth = (): AuthContextState => {
     }, []);
 
     const authCallback: HubCallback = ({payload}) => {
+        console.log(payload.event);
         setLoading(true);
 
         switch (payload.event) {
             case 'signIn':
             case 'cognitoHostedUI':
-                getUser().then((authUser) => setUser(authUser));
+                defineUser().then();
                 break;
             case 'signIn_failure':
             case 'cognitoHostedUI_failure':
@@ -46,11 +41,15 @@ const useProvideCognitoAuth = (): AuthContextState => {
         setLoading(false);
     }
 
-    const getUser = (): Promise<AuthUser> => {
-        return Auth.currentAuthenticatedUser().then((user: CognitoUser) => ({
-            username: user.getUsername(),
-            email: user.getUsername()
-        }));
+    const defineUser = async (): Promise<void> => {
+        setLoading(true);
+        const cognitoUser: CognitoUser = await Auth.currentAuthenticatedUser();
+        const authUser: AuthUser = {
+            username: cognitoUser.getUsername(),
+            email: cognitoUser.getUsername()
+        }
+        setUser(authUser);
+        setLoading(false);
     }
 
     const signIn = async ({username, password}: SignInCredentials): Promise<AuthUser> => {

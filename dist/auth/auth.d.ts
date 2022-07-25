@@ -18,6 +18,10 @@ export interface AuthContextState {
 }
 export declare const AuthContext: React.Context<AuthContextState>;
 export declare const useAuth: () => AuthContextState;
+export declare const withAuth: <T extends WithAuthProps = WithAuthProps>(WrappedComponent: React.ComponentType<T>) => {
+    (props: Omit<T, "user">): JSX.Element;
+    displayName: string;
+};
 export interface RequiresAuthProps {
     children: JSX.Element;
     fallback: JSX.Element;
@@ -27,7 +31,3 @@ export declare const RequiresAuth: ({ children, fallback, signOutPath }: Require
 export interface WithAuthProps {
     user: AuthUser | null;
 }
-export declare const withAuth: <T extends WithAuthProps = WithAuthProps>(WrappedComponent: React.ComponentType<T>) => {
-    (props: Omit<T, "user">): JSX.Element;
-    displayName: string;
-};

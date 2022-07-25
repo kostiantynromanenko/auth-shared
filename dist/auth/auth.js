@@ -19,6 +19,15 @@ export var AuthContext = createContext({
     signOut: function () { return Promise.resolve(); },
 });
 export var useAuth = function () { return useContext(AuthContext); };
+export var withAuth = function (WrappedComponent) {
+    var displayName = WrappedComponent.displayName || "Component";
+    var ComponentWithTheme = function (props) {
+        var user = useAuth().user;
+        return _jsx(WrappedComponent, __assign({ user: user }, props));
+    };
+    ComponentWithTheme.displayName = "withAuth(".concat(displayName, ")");
+    return ComponentWithTheme;
+};
 export var RequiresAuth = function (_a) {
     var children = _a.children, fallback = _a.fallback, signOutPath = _a.signOutPath;
     var _b = useAuth(), user = _b.user, isLoading = _b.isLoading;
@@ -30,13 +39,4 @@ export var RequiresAuth = function (_a) {
         return _jsx(Navigate, { to: signOutPath || '/login', state: { from: location }, replace: true });
     }
     return children;
-};
-export var withAuth = function (WrappedComponent) {
-    var displayName = WrappedComponent.displayName || "Component";
-    var ComponentWithTheme = function (props) {
-        var user = useAuth().user;
-        return _jsx(WrappedComponent, __assign({ user: user }, props));
-    };
-    ComponentWithTheme.displayName = "withAuth(".concat(displayName, ")");
-    return ComponentWithTheme;
 };

@@ -29,4 +29,4 @@ export interface RequiresAuthProps {
     fallback: JSX.Element;
     signOutPath?: string;
 }
-export declare const RequiresAuth: ({ children, fallback, signOutPath }: RequiresAuthProps) => JSX.Element;
+export declare const ProtectedRoute: ({ children, fallback, signOutPath }: RequiresAuthProps) => JSX.Element;

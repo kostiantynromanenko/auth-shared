@@ -28,7 +28,7 @@ export var withAuth = function (WrappedComponent) {
     ComponentWithTheme.displayName = "withAuth(".concat(displayName, ")");
     return ComponentWithTheme;
 };
-export var RequiresAuth = function (_a) {
+export var ProtectedRoute = function (_a) {
     var children = _a.children, fallback = _a.fallback, signOutPath = _a.signOutPath;
     var _b = useAuth(), user = _b.user, isLoading = _b.isLoading;
     var location = useLocation();

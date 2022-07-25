@@ -30,6 +30,22 @@ export const AuthContext = createContext<AuthContextState>({
 
 export const useAuth = () => useContext(AuthContext);
 
+export const withAuth = <T extends WithAuthProps = WithAuthProps>(
+    WrappedComponent: React.ComponentType<T>
+) => {
+    const displayName =
+        WrappedComponent.displayName || "Component";
+
+    const ComponentWithTheme = (props: Omit<T, keyof WithAuthProps>) => {
+        const { user } = useAuth();
+        return <WrappedComponent user={user} {...(props as T)} />;
+    };
+
+    ComponentWithTheme.displayName = `withAuth(${displayName})`;
+
+    return ComponentWithTheme;
+}
+
 export interface RequiresAuthProps {
     children: JSX.Element,
     fallback: JSX.Element,
@@ -53,21 +69,4 @@ export const RequiresAuth = ({ children, fallback, signOutPath }: RequiresAuthPr
 
 export interface WithAuthProps {
     user: AuthUser | null;
-}
-
-export const withAuth = <T extends WithAuthProps = WithAuthProps>(
-    WrappedComponent: React.ComponentType<T>
-) => {
-    const displayName =
-        WrappedComponent.displayName || "Component";
-
-    const ComponentWithTheme = (props: Omit<T, keyof WithAuthProps>) => {
-        const { user } = useAuth();
-
-        return <WrappedComponent user={user} {...(props as T)} />;
-    };
-
-    ComponentWithTheme.displayName = `withAuth(${displayName})`;
-
-    return ComponentWithTheme;
 }

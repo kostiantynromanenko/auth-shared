@@ -24,3 +24,10 @@ export interface RequiresAuthProps {
     signOutPath?: string;
 }
 export declare const RequiresAuth: ({ children, fallback, signOutPath }: RequiresAuthProps) => JSX.Element;
+export interface WithAuthProps {
+    user: AuthUser | null;
+}
+export declare const withAuth: <T extends WithAuthProps = WithAuthProps>(WrappedComponent: React.ComponentType<T>) => {
+    (props: Omit<T, "user">): JSX.Element;
+    displayName: string;
+};

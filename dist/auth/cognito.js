@@ -108,6 +108,31 @@ var useProvideCognitoAuth = function () {
         signOut: signOut,
     };
 };
+export var checkSession = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var user, e_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 4, , 6]);
+                return [4 /*yield*/, CognitoAuth.currentAuthenticatedUser()];
+            case 1:
+                user = _a.sent();
+                if (!!user) return [3 /*break*/, 3];
+                return [4 /*yield*/, CognitoAuth.federatedSignIn()];
+            case 2:
+                _a.sent();
+                _a.label = 3;
+            case 3: return [3 /*break*/, 6];
+            case 4:
+                e_2 = _a.sent();
+                return [4 /*yield*/, CognitoAuth.federatedSignIn()];
+            case 5:
+                _a.sent();
+                return [3 /*break*/, 6];
+            case 6: return [2 /*return*/];
+        }
+    });
+}); };
 export var CognitoAuthProvider = function (_a) {
     var children = _a.children;
     var auth = useProvideCognitoAuth();

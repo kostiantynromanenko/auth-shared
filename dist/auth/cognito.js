@@ -65,7 +65,9 @@ var useProvideCognitoAuth = function () {
         return __awaiter(void 0, void 0, void 0, function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, defineUser()];
+                    case 0:
+                        console.log('Hub event: ' + payload.event);
+                        return [4 /*yield*/, defineUser()];
                     case 1:
                         _b.sent();
                         return [2 /*return*/];

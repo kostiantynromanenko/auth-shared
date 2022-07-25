@@ -21,6 +21,7 @@ const useProvideCognitoAuth = (): AuthContextState => {
     }, []);
 
     const authCallback: HubCallback = async ({payload}) => {
+        console.log('Hub event: ' + payload.event);
         await defineUser();
     }
 

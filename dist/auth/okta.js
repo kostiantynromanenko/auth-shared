@@ -47,60 +47,34 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { jsx as _jsx } from "react/jsx-runtime";
 import { useEffect, useState } from 'react';
-import { Auth, Hub } from 'aws-amplify';
-import { AuthContext } from './auth';
-export var CognitoAuth = Auth;
+import { OktaAuth, toRelativeUrl } from "@okta/okta-auth-js";
+import { Security } from "@okta/okta-react";
+import { createBrowserHistory } from "history";
+var Okta = new OktaAuth({
+    issuer: 'https://dev-71768760.okta.com/oauth2/default',
+    clientId: '0oa5wzyrw0vOyoX995d7',
+    redirectUri: 'http://localhost:3000/login'
+});
 var useProvideAuth = function () {
     var _a = useState(null), user = _a[0], setUser = _a[1];
     var _b = useState(true), isLoading = _b[0], setLoading = _b[1];
     useEffect(function () {
-        Hub.listen('auth', function () { return checkUser(); });
-        checkUser().then();
-        return function () {
-            Hub.remove('auth', function () { return checkUser(); });
-        };
     }, []);
-    var checkUser = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var cognitoUser, authUser, e_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, 3, 4]);
-                    setLoading(true);
-                    return [4 /*yield*/, Auth.currentAuthenticatedUser()];
-                case 1:
-                    cognitoUser = _a.sent();
-                    if (cognitoUser) {
-                        authUser = {
-                            username: cognitoUser.getUsername(),
-                            email: cognitoUser.getUsername()
-                        };
-                        setUser(authUser);
-                    }
-                    else {
-                        setUser(null);
-                    }
-                    return [3 /*break*/, 4];
-                case 2:
-                    e_1 = _a.sent();
-                    setUser(null);
-                    return [3 /*break*/, 4];
-                case 3:
-                    setLoading(false);
-                    return [7 /*endfinally*/];
-                case 4: return [2 /*return*/];
-            }
-        });
-    }); };
     var signIn = function (_a) {
         var username = _a.username, password = _a.password;
         return __awaiter(void 0, void 0, void 0, function () {
             return __generator(this, function (_b) {
-                return [2 /*return*/, CognitoAuth.signIn({ username: username, password: password })];
+                setLoading(true);
+                return [2 /*return*/, Okta.signInWithCredentials({ username: username, password: password }).then(function (transaction) {
+                        var authUser = transaction.user;
+                        setUser(authUser);
+                        setLoading(false);
+                        return authUser;
+                    })];
             });
         });
     };
-    var signOut = function () { return CognitoAuth.signOut(); };
+    var signOut = function () { return Okta.signOut().then(function () { return setUser(null); }); };
     return {
         user: user,
         isLoading: isLoading,
@@ -108,51 +82,29 @@ var useProvideAuth = function () {
         signOut: signOut,
     };
 };
-export var checkSession = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var user, e_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 4, , 6]);
-                return [4 /*yield*/, CognitoAuth.currentAuthenticatedUser()];
-            case 1:
-                user = _a.sent();
-                if (!!user) return [3 /*break*/, 3];
-                return [4 /*yield*/, CognitoAuth.federatedSignIn()];
-            case 2:
-                _a.sent();
-                _a.label = 3;
-            case 3: return [3 /*break*/, 6];
-            case 4:
-                e_2 = _a.sent();
-                return [4 /*yield*/, CognitoAuth.federatedSignIn()];
-            case 5:
-                _a.sent();
-                return [3 /*break*/, 6];
-            case 6: return [2 /*return*/];
-        }
-    });
-}); };
-export var CognitoAuthProvider = function (_a) {
+export var OktaAuthProvider = function (_a) {
     var children = _a.children;
-    var auth = useProvideAuth();
-    return _jsx(AuthContext.Provider, __assign({ value: auth }, { children: children }));
+    var history = createBrowserHistory();
+    var restoreOriginalUri = function (_oktaAuth, originalUri) { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            history.replace(toRelativeUrl(originalUri || '/', window.location.origin));
+            return [2 /*return*/];
+        });
+    }); };
+    return (_jsx(Security, __assign({ oktaAuth: Okta, restoreOriginalUri: restoreOriginalUri }, { children: children })));
 };
-var CognitoAuthService = /** @class */ (function () {
-    function CognitoAuthService() {
+var OktaAuthService = /** @class */ (function () {
+    function OktaAuthService() {
     }
-    CognitoAuthService.prototype.signIn = function () {
-        return Promise.resolve();
+    OktaAuthService.prototype.signIn = function () {
+        return Okta.signInWithRedirect();
     };
-    CognitoAuthService.prototype.signOut = function () {
-        return Promise.resolve();
+    OktaAuthService.prototype.signOut = function () {
+        return Okta.signOut();
     };
-    CognitoAuthService.prototype.checkSession = function () {
-        return CognitoAuth.currentAuthenticatedUser().then(function (user) { return ({
-            username: user.getUsername(),
-            email: user.getUsername()
-        }); });
+    OktaAuthService.prototype.checkSession = function () {
+        return Okta.getUser();
     };
-    return CognitoAuthService;
+    return OktaAuthService;
 }());
-export { CognitoAuthService };
+export { OktaAuthService };

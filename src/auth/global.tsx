@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 
 export interface LoginCallbackProps {
     redirectUrl?: string;
-    fallback?: string;
+    fallback?: JSX.Element;
 }
 
 export const LoginCallback = ({redirectUrl, fallback}: LoginCallbackProps) => {

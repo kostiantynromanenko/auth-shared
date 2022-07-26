@@ -63,135 +63,135 @@ var useProvideAuth = function (providerType, config) {
     var authService = useState(function () { return createAuthService(providerType, config); })[0];
     var _a = useState(null), user = _a[0], setUser = _a[1];
     var _b = useState(true), isLoading = _b[0], setLoading = _b[1];
-    var _c = useState(null), error = _c[0], setError = _c[1];
+    var _c = useState(''), error = _c[0], setError = _c[1];
     useEffect(function () {
         checkSession().then();
     }, []);
     var signIn = function (credentials) { return __awaiter(void 0, void 0, void 0, function () {
+        var e_1;
         return __generator(this, function (_a) {
-            return [2 /*return*/, withLoading(function () { return __awaiter(void 0, void 0, void 0, function () {
-                    var e_1;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                _a.trys.push([0, 2, , 3]);
-                                return [4 /*yield*/, authService.signIn(credentials)];
-                            case 1:
-                                _a.sent();
-                                return [3 /*break*/, 3];
-                            case 2:
-                                e_1 = _a.sent();
-                                setError('Sign in error: ' + e_1.message);
-                                return [3 /*break*/, 3];
-                            case 3: return [2 /*return*/];
-                        }
-                    });
-                }); })];
+            switch (_a.label) {
+                case 0:
+                    setLoading(true);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, authService.signIn(credentials)];
+                case 2:
+                    _a.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_1 = _a.sent();
+                    setError('Sign in error: ' + e_1.message);
+                    return [3 /*break*/, 4];
+                case 4:
+                    setLoading(false);
+                    return [2 /*return*/];
+            }
         });
     }); };
     var signInWithRedirect = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var e_2;
         return __generator(this, function (_a) {
-            return [2 /*return*/, withLoading(function () { return __awaiter(void 0, void 0, void 0, function () {
-                    var e_2;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                _a.trys.push([0, 2, , 3]);
-                                return [4 /*yield*/, authService.signInWithRedirect()];
-                            case 1:
-                                _a.sent();
-                                return [3 /*break*/, 3];
-                            case 2:
-                                e_2 = _a.sent();
-                                setError('Sign in error: ' + e_2.message);
-                                return [3 /*break*/, 3];
-                            case 3: return [2 /*return*/];
-                        }
-                    });
-                }); })];
+            switch (_a.label) {
+                case 0:
+                    setLoading(true);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, authService.signInWithRedirect()];
+                case 2:
+                    _a.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_2 = _a.sent();
+                    setError('Sign in error: ' + e_2.message);
+                    return [3 /*break*/, 4];
+                case 4:
+                    setLoading(false);
+                    return [2 /*return*/];
+            }
         });
     }); };
     var signOut = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var e_3;
         return __generator(this, function (_a) {
-            return [2 /*return*/, withLoading(function () { return __awaiter(void 0, void 0, void 0, function () {
-                    var e_3;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                _a.trys.push([0, 2, , 3]);
-                                return [4 /*yield*/, authService.signOut()];
-                            case 1:
-                                _a.sent();
-                                return [3 /*break*/, 3];
-                            case 2:
-                                e_3 = _a.sent();
-                                setError('Sign out error: ' + e_3.message);
-                                return [3 /*break*/, 3];
-                            case 3: return [2 /*return*/];
-                        }
-                    });
-                }); })];
+            switch (_a.label) {
+                case 0:
+                    setLoading(true);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, authService.signOut()];
+                case 2:
+                    _a.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_3 = _a.sent();
+                    setError('Sign out error: ' + e_3.message);
+                    return [3 /*break*/, 4];
+                case 4:
+                    setLoading(false);
+                    return [2 /*return*/];
+            }
         });
     }); };
     var handleAuthRedirect = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var user_1, e_4;
         return __generator(this, function (_a) {
-            return [2 /*return*/, withLoading(function () { return __awaiter(void 0, void 0, void 0, function () {
-                    var user_1, e_4;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                _a.trys.push([0, 2, , 3]);
-                                return [4 /*yield*/, authService.handleAuthRedirect()];
-                            case 1:
-                                user_1 = _a.sent();
-                                setUser(user_1);
-                                return [3 /*break*/, 3];
-                            case 2:
-                                e_4 = _a.sent();
-                                setError('Auth redirect error: ' + e_4.message);
-                                return [3 /*break*/, 3];
-                            case 3: return [2 /*return*/];
-                        }
-                    });
-                }); })];
+            switch (_a.label) {
+                case 0:
+                    setLoading(true);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, authService.handleAuthRedirect()];
+                case 2:
+                    user_1 = _a.sent();
+                    setUser(user_1);
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_4 = _a.sent();
+                    setError('Auth redirect error: ' + e_4.message);
+                    return [3 /*break*/, 4];
+                case 4:
+                    setLoading(false);
+                    return [2 /*return*/];
+            }
         });
     }); };
     var checkSession = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var isAuthenticated, authUser, e_5;
         return __generator(this, function (_a) {
-            return [2 /*return*/, withLoading(function () { return __awaiter(void 0, void 0, void 0, function () {
-                    var isAuthenticated, authUser, e_5;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                _a.trys.push([0, 5, , 6]);
-                                return [4 /*yield*/, authService.isAuthenticated()];
-                            case 1:
-                                isAuthenticated = _a.sent();
-                                if (!isAuthenticated) return [3 /*break*/, 3];
-                                return [4 /*yield*/, authService.getUser()];
-                            case 2:
-                                authUser = _a.sent();
-                                setUser(authUser);
-                                return [3 /*break*/, 4];
-                            case 3:
-                                setUser(null);
-                                _a.label = 4;
-                            case 4: return [3 /*break*/, 6];
-                            case 5:
-                                e_5 = _a.sent();
-                                setUser(null);
-                                return [3 /*break*/, 6];
-                            case 6: return [2 /*return*/];
-                        }
-                    });
-                }); })];
+            switch (_a.label) {
+                case 0:
+                    setLoading(true);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 6, , 7]);
+                    return [4 /*yield*/, authService.isAuthenticated()];
+                case 2:
+                    isAuthenticated = _a.sent();
+                    if (!isAuthenticated) return [3 /*break*/, 4];
+                    return [4 /*yield*/, authService.getUser()];
+                case 3:
+                    authUser = _a.sent();
+                    setUser(authUser);
+                    return [3 /*break*/, 5];
+                case 4:
+                    setUser(null);
+                    _a.label = 5;
+                case 5: return [3 /*break*/, 7];
+                case 6:
+                    e_5 = _a.sent();
+                    setUser(null);
+                    return [3 /*break*/, 7];
+                case 7:
+                    setLoading(false);
+                    return [2 /*return*/];
+            }
         });
     }); };
-    var withLoading = function (action) {
-        setLoading(true);
-        action();
-        setLoading(false);
-    };
     return {
         user: user,
         error: error,

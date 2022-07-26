@@ -61,7 +61,11 @@ export class OktaAuthService implements AuthService {
         return Okta.signOut();
     }
 
-    checkSession(): Promise<any> {
-        return Okta.getUser<AuthUser>();
+    isAuthenticated(): Promise<boolean> {
+        return Okta.isAuthenticated();
+    }
+
+    getUser(): Promise<any> {
+        return Okta.getUser();
     }
 }

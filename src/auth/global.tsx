@@ -1,6 +1,6 @@
+import React, {ReactElement, useEffect, useState} from "react";
 import {AuthContext, AuthContextState, AuthUser} from "./auth";
 import {createAuthService} from "./create-auth-service";
-import {ReactElement, useEffect, useState} from "react";
 
 const useProvideAuth = (provider: 'okta' | 'cognito'): AuthContextState => {
     const authService = createAuthService(provider);
@@ -9,12 +9,16 @@ const useProvideAuth = (provider: 'okta' | 'cognito'): AuthContextState => {
 
     useEffect(() => {
         setLoading(true);
-        authService.checkSession().then((user) => {
-            if (user) {
-                setUser(user);
+        authService.isAuthenticated().then((isAuthenticated) => {
+            if (isAuthenticated) {
+                authService.getUser().then((user) => {
+                    setUser(user);
+                    setLoading(false);
+                })
             } else {
                 setUser(null);
             }
+
             setLoading(false);
         });
     })

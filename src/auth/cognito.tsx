@@ -62,7 +62,7 @@ export const checkSession = async (): Promise<void> => {
         if (!user) {
             await CognitoAuth.federatedSignIn();
         }
-    } catch(e) {
+    } catch (e) {
         await CognitoAuth.federatedSignIn();
     }
 }
@@ -82,10 +82,14 @@ export class CognitoAuthService implements AuthService {
         return Promise.resolve();
     }
 
-    checkSession(): Promise<AuthUser> {
+    getUser(): Promise<AuthUser> {
         return CognitoAuth.currentAuthenticatedUser().then((user: CognitoUser) => ({
             username: user.getUsername(),
             email: user.getUsername()
         }));
+    }
+
+    isAuthenticated(): Promise<boolean> {
+        return CognitoAuth.currentSession().then((session) => session && session.isValid());
     }
 }

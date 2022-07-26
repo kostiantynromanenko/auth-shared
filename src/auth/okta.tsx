@@ -29,15 +29,16 @@ export class OktaAuthService implements AuthService {
     handleAuthRedirect(): Promise<AuthUser | null> {
         if (this.oktaAuth.token.isLoginRedirect()) {
             return this.oktaAuth.handleLoginRedirect()
-                .then(async () => {
-                    const user = await this.oktaAuth.getUser();
-                    return {
-                        username: user.preferred_username,
-                        email: user.email
-                    } as AuthUser;
-                });
+                .then(() => this.getAuthUser());
         }
 
-        return Promise.reject('Not login redirected.');
+        return Promise.reject('No logins redirected.');
+    }
+
+    private getAuthUser(): Promise<AuthUser> {
+        return this.oktaAuth.getUser().then((user) => ({
+            username: user.preferred_username,
+            email: user.email
+        } as AuthUser));
     }
 }

@@ -19,7 +19,8 @@ export interface AuthContextState {
     isLoading: boolean,
     signIn: (credentials: SignInCredentials) => Promise<unknown>;
     signOut: () => Promise<unknown>;
-    handleAuthRedirect: () => Promise<unknown>
+    checkSession: () => Promise<unknown>;
+    handleAuthRedirect: () => Promise<unknown>;
 }
 
 export const AuthContext = createContext<AuthContextState>({
@@ -27,6 +28,7 @@ export const AuthContext = createContext<AuthContextState>({
     isLoading: true,
     signIn: () => Promise.resolve(),
     signOut: () => Promise.resolve(),
+    checkSession: () => Promise.resolve(),
     handleAuthRedirect: () => Promise.resolve()
 });
 

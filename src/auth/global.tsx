@@ -20,26 +20,45 @@ const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthCon
     const [user, setUser] = useState<AuthUser | null>(null);
     const [isLoading, setLoading] = useState(true);
 
-    const signIn = (): Promise<any> => {
+    useEffect(() => {
+        checkSession().then();
+    }, [])
+
+    const signIn = async () => {
         setLoading(true);
-        return authService.signIn().then(() => setLoading(false));
+        await signIn();
+        setLoading(false);
     }
 
-    const signOut = (): Promise<any> => {
+    const signOut = async () => {
         setLoading(true);
-        return authService.signOut().then(() => setLoading(false));
+        await signOut();
+        setLoading(false);
     }
 
-    const handleAuthRedirect = () => authService.handleAuthRedirect()
-        .then((user) => {
-            setUser(user);
-            setLoading(false);
-        });
+    const handleAuthRedirect = async () => {
+        const user = await authService.handleAuthRedirect();
+        setUser(user);
+        setLoading(false);
+    }
+
+    const checkSession = async () => {
+        setLoading(true);
+        const isAuthenticated = authService.isAuthenticated();
+        if (isAuthenticated) {
+            const authUser = await authService.getUser();
+            setUser(authUser);
+        } else {
+            setUser(null);
+        }
+        setLoading(false);
+    }
 
     return {
         user,
         isLoading,
         handleAuthRedirect,
+        checkSession,
         signIn,
         signOut,
     }

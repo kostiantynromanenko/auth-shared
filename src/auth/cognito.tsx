@@ -5,9 +5,6 @@ import {AuthUser} from './auth';
 import {AuthService} from './auth-service';
 
 export class CognitoAuthService implements AuthService {
-    constructor(private config) {
-        Auth.configure(config);
-    }
 
     signIn(): Promise<unknown> {
         return Auth.signIn({

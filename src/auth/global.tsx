@@ -26,13 +26,13 @@ const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthCon
 
     const signIn = async () => {
         setLoading(true);
-        await signIn();
+        await authService.signIn();
         setLoading(false);
     }
 
     const signOut = async () => {
         setLoading(true);
-        await signOut();
+        await authService.signOut();
         setLoading(false);
     }
 

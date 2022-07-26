@@ -27,23 +27,6 @@ var useProvideAuth = function (providerType, config) {
     var authService = useState(function () { return createAuthService(providerType, config); })[0];
     var user = useState(null)[0];
     var _a = useState(true), isLoading = _a[0], setLoading = _a[1];
-    // useEffect(() => {
-    //     setLoading(true);
-    //     authService.isAuthenticated().then((isAuthenticated) => {
-    //         console.log('Authenticated: ' + isAuthenticated);
-    //         if (isAuthenticated) {
-    //             authService.getUser().then((user) => {
-    //                 console.log('User:');
-    //                 console.log(user);
-    //                 setUser(user);
-    //                 setLoading(false);
-    //             })
-    //         } else {
-    //             setUser(null);
-    //             setLoading(false);
-    //         }
-    //     });
-    // }, [])
     var signIn = function () {
         setLoading(true);
         return authService.signIn().then(function () { return setLoading(false); });

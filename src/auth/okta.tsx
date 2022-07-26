@@ -32,12 +32,11 @@ export class OktaAuthService implements AuthService {
 
         if (this.oktaAuth.token.isLoginRedirect()) {
             handleLoginRedirect()
-                .then(() => {
-                    console.log(this.oktaAuth.getUser());
+                .then(async () => {
+                    const user = await this.oktaAuth.getUser();
+                    console.log(user);
                 })
-                .catch(e => {
-                console.error(e);
-            });
+                .catch(e => console.error(e));
 
             return Promise.resolve(true);
         }

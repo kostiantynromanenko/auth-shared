@@ -1,4 +1,4 @@
-import React, {ReactElement, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {AuthContext, AuthContextState, AuthUser, useAuth} from "./auth";
 import {createAuthService} from "./create-auth-service";
 import {OktaAuthOptions} from "@okta/okta-auth-js";
@@ -30,7 +30,8 @@ const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthCon
         return authService.signOut().then(() => setLoading(false));
     }
 
-    const handleAuthRedirect = () => authService.handleAuthRedirect();
+    const handleAuthRedirect = () => authService.handleAuthRedirect()
+        .then(() => setLoading(false));
 
     return {
         user,

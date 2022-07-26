@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { AuthContext } from "./auth";
 import { createAuthService } from "./create-auth-service";
 var useProvideAuth = function (providerType, config) {
-    var authService = createAuthService(providerType, config);
+    var authService = useState(function () { return createAuthService(providerType, config); })[0];
     var _a = useState(null), user = _a[0], setUser = _a[1];
     var _b = useState(true), isLoading = _b[0], setLoading = _b[1];
     useEffect(function () {
@@ -34,7 +34,7 @@ var useProvideAuth = function (providerType, config) {
                 setLoading(false);
             }
         });
-    });
+    }, []);
     var signIn = function () {
         setLoading(true);
         return authService.signIn().then(function () { return setLoading(false); });

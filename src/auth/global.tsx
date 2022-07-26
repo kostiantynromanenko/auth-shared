@@ -4,15 +4,20 @@ import {createAuthService} from "./create-auth-service";
 import {OktaAuthOptions} from "@okta/okta-auth-js";
 import {useNavigate} from "react-router-dom";
 
-export const LoginCallback = ({redirectUrl = '/'}) => {
+export interface LoginCallbackProps {
+    redirectUrl?: string;
+    fallback?: string;
+}
+
+export const LoginCallback = ({redirectUrl, fallback}: LoginCallbackProps) => {
     const {handleAuthRedirect} = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-        handleAuthRedirect().then(() => navigate(redirectUrl)).catch();
+        handleAuthRedirect().then(() => navigate(redirectUrl || '/')).catch();
     }, []);
 
-    return <div>Loading...</div>
+    return fallback || <div>Loading...</div>
 }
 
 const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthContextState => {

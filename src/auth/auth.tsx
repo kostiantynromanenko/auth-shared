@@ -50,13 +50,13 @@ export const withAuth = <T extends WithAuthProps = WithAuthProps>(
     return ComponentWithTheme;
 }
 
-export interface RequiresAuthProps {
+export interface ProtectedRouteProps {
     children: JSX.Element,
     fallback?: JSX.Element,
     signOutPath?: string
 }
 
-export const ProtectedRoute = ({ children, fallback, signOutPath }: RequiresAuthProps) => {
+export const ProtectedRoute = ({ children, fallback, signOutPath }: ProtectedRouteProps) => {
     const {user, isLoading} = useAuth();
     const location = useLocation();
 

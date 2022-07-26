@@ -38,6 +38,6 @@ export class OktaAuthService implements AuthService {
                 });
         }
 
-        return Promise.reject(null);
+        return Promise.reject('Not login redirected.');
     }
 }

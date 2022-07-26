@@ -10,7 +10,7 @@ export const LoginCallback = ({redirectUrl = '/'}) => {
 
     useEffect(() => {
         handleAuthRedirect().then(() => navigate(redirectUrl)).catch();
-    }, [handleAuthRedirect]);
+    }, []);
 
     return <div>Loading...</div>
 }
@@ -33,7 +33,7 @@ const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthCon
     const handleAuthRedirect = () => authService.handleAuthRedirect()
         .then((user) => {
             setUser(user);
-            setLoading(false)
+            setLoading(false);
         });
 
     return {

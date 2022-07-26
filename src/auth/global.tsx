@@ -19,26 +19,38 @@ const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthCon
     const [authService] = useState(() => createAuthService(providerType, config));
     const [user, setUser] = useState<AuthUser | null>(null);
     const [isLoading, setLoading] = useState(true);
+    const [error, setError] = useState<string>('');
 
     useEffect(() => {
         checkSession().then();
     }, [])
 
-    const signIn = async () => {
-        setLoading(true);
-        await authService.signIn();
-        setLoading(false);
-    }
+    const signIn = async () => withLoading(async () => {
+        try {
+            await authService.signIn();
+        } catch (e: Error) {
+            setError('Sign in error: ' + e.message)
+        }
+    });
 
     const signOut = async () => {
         setLoading(true);
-        await authService.signOut();
+        try {
+            await authService.signOut();
+        } catch (e: Error) {
+            setError('Sign out error: ' + e.message)
+        }
         setLoading(false);
     }
 
     const handleAuthRedirect = async () => {
-        const user = await authService.handleAuthRedirect();
-        setUser(user);
+        setLoading(true);
+        try {
+            const user = await authService.handleAuthRedirect();
+            setUser(user);
+        } catch (e: Error) {
+            setError('Auth redirect error: ' + e.message);
+        }
         setLoading(false);
     }
 
@@ -58,8 +70,15 @@ const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthCon
         setLoading(false);
     }
 
+    const withLoading = (action: () => void) => {
+        setLoading(true);
+        action();
+        setLoading(false);
+    }
+
     return {
         user,
+        error,
         isLoading,
         handleAuthRedirect,
         checkSession,

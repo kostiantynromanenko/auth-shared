@@ -17,6 +17,7 @@ export interface SignInCredentials {
 export interface AuthContextState {
     user: AuthUser | null;
     isLoading: boolean,
+    error: string | null,
     signIn: (credentials: SignInCredentials) => Promise<unknown>;
     signOut: () => Promise<unknown>;
     checkSession: () => Promise<unknown>;
@@ -26,6 +27,7 @@ export interface AuthContextState {
 export const AuthContext = createContext<AuthContextState>({
     user: null,
     isLoading: true,
+    error: null,
     signIn: () => Promise.resolve(),
     signOut: () => Promise.resolve(),
     checkSession: () => Promise.resolve(),

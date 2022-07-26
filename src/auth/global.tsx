@@ -4,7 +4,7 @@ import {createAuthService} from "./create-auth-service";
 import {OktaAuthOptions} from "@okta/okta-auth-js";
 
 const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthContextState => {
-    const authService = createAuthService(providerType, config);
+    const [authService] = useState(() => createAuthService(providerType, config));
     const [user, setUser] = useState<AuthUser | null>(null);
     const [isLoading, setLoading] = useState(true);
 
@@ -24,7 +24,7 @@ const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthCon
                 setLoading(false);
             }
         });
-    })
+    }, [])
 
     const signIn = (): Promise<any> => {
         setLoading(true);

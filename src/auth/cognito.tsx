@@ -1,34 +1,40 @@
 import React from 'react';
 import {Auth} from 'aws-amplify';
 import {CognitoUser} from 'amazon-cognito-identity-js';
-import {AuthUser} from './auth';
+import {AuthUser, SignInCredentials} from './auth';
 import {AuthService} from './auth-service';
+
+export const CognitoAuth = Auth;
 
 export class CognitoAuthService implements AuthService {
 
-    signIn(): Promise<unknown> {
-        return Auth.signIn({
-            username: '',
-            password: ''
+    signIn({username, password}: SignInCredentials): Promise<any> {
+        return CognitoAuth.signIn({
+            username,
+            password
         });
     }
 
-    signOut(): Promise<unknown> {
-        return Auth.signOut();
+    signInWithRedirect(): Promise<any> {
+        return CognitoAuth.federatedSignIn();
     }
 
-    getUser(): Promise<AuthUser> {
-        return Auth.currentAuthenticatedUser().then((user: CognitoUser) => ({
-            username: user.getUsername(),
-            email: user.getUsername()
-        }));
+    signOut(): Promise<void> {
+        return CognitoAuth.signOut();
     }
 
     isAuthenticated(): Promise<boolean> {
-        return Auth.currentSession().then((session) => session && session.isValid());
+        return this.getUser().then((user) => !!user);
     }
 
-    handleAuthRedirect(): Promise<any> {
-        return Promise.resolve();
+    getUser(): Promise<AuthUser> {
+        return CognitoAuth.currentAuthenticatedUser().then((user: CognitoUser) => ({
+            username: user.getUsername(),
+            email: user.getUsername()
+        } as AuthUser));
+    }
+
+    handleAuthRedirect(): Promise<AuthUser> {
+        return this.getUser();
     }
 }

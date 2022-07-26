@@ -22,23 +22,19 @@ export class OktaAuthService implements AuthService {
         return this.oktaAuth.isAuthenticated();
     }
 
-    getUser(): Promise<any> {
-        return this.oktaAuth.getUser();
+    getUser(): Promise<AuthUser> {
+        return this.oktaAuth.getUser().then((user) => ({
+            username: user.preferred_username,
+            email: user.email
+        } as AuthUser));
     }
 
     handleAuthRedirect(): Promise<AuthUser | null> {
         if (this.oktaAuth.token.isLoginRedirect()) {
             return this.oktaAuth.handleLoginRedirect()
-                .then(() => this.getAuthUser());
+                .then(() => this.getUser());
         }
 
         return Promise.reject('No logins redirected.');
-    }
-
-    private getAuthUser(): Promise<AuthUser> {
-        return this.oktaAuth.getUser().then((user) => ({
-            username: user.preferred_username,
-            email: user.email
-        } as AuthUser));
     }
 }

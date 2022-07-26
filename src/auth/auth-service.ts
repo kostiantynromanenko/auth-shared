@@ -6,7 +6,7 @@ export interface AuthService {
 
     isAuthenticated(): Promise<boolean>
 
-    getUser(): Promise<any>;
+    getUser(): Promise<AuthUser>;
 
     handleAuthRedirect(): Promise<AuthUser | null>;
 }

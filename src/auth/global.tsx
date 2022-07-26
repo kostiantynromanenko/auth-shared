@@ -11,16 +11,18 @@ const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthCon
     useEffect(() => {
         setLoading(true);
         authService.isAuthenticated().then((isAuthenticated) => {
+            console.log('Authenticated: ' + isAuthenticated);
             if (isAuthenticated) {
                 authService.getUser().then((user) => {
+                    console.log('User:');
+                    console.log(user);
                     setUser(user);
                     setLoading(false);
                 })
             } else {
                 setUser(null);
+                setLoading(false);
             }
-
-            setLoading(false);
         });
     })
 

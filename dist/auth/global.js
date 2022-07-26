@@ -106,26 +106,32 @@ var useProvideAuth = function (providerType, config) {
         });
     }); };
     var checkSession = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var isAuthenticated, authUser;
+        var isAuthenticated, authUser, e_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     setLoading(true);
-                    return [4 /*yield*/, authService.isAuthenticated()];
+                    _a.label = 1;
                 case 1:
-                    isAuthenticated = _a.sent();
-                    console.log(isAuthenticated);
-                    if (!isAuthenticated) return [3 /*break*/, 3];
-                    return [4 /*yield*/, authService.getUser()];
+                    _a.trys.push([1, 6, , 7]);
+                    return [4 /*yield*/, authService.isAuthenticated()];
                 case 2:
-                    authUser = _a.sent();
-                    console.log(authUser);
-                    setUser(authUser);
-                    return [3 /*break*/, 4];
+                    isAuthenticated = _a.sent();
+                    if (!isAuthenticated) return [3 /*break*/, 4];
+                    return [4 /*yield*/, authService.getUser()];
                 case 3:
-                    setUser(null);
-                    _a.label = 4;
+                    authUser = _a.sent();
+                    setUser(authUser);
+                    return [3 /*break*/, 5];
                 case 4:
+                    setUser(null);
+                    _a.label = 5;
+                case 5: return [3 /*break*/, 7];
+                case 6:
+                    e_1 = _a.sent();
+                    setUser(null);
+                    return [3 /*break*/, 7];
+                case 7:
                     setLoading(false);
                     return [2 /*return*/];
             }

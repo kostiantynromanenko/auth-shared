@@ -1,6 +1,6 @@
 {
   "name": "@h1totsu/auth-shared",
-  "version": "0.4.37",
+  "version": "0.4.38",
   "description": "Shared auth",
   "main": "dist/index.js",
   "module": "dist/index.js",

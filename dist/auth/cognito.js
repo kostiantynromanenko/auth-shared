@@ -1,8 +1,6 @@
 import { Auth } from 'aws-amplify';
 var CognitoAuthService = /** @class */ (function () {
-    function CognitoAuthService(config) {
-        this.config = config;
-        Auth.configure(config);
+    function CognitoAuthService() {
     }
     CognitoAuthService.prototype.signIn = function () {
         return Auth.signIn({

@@ -71,7 +71,7 @@ var useProvideAuth = function (providerType, config) {
             switch (_a.label) {
                 case 0:
                     setLoading(true);
-                    return [4 /*yield*/, signIn()];
+                    return [4 /*yield*/, authService.signIn()];
                 case 1:
                     _a.sent();
                     setLoading(false);
@@ -84,7 +84,7 @@ var useProvideAuth = function (providerType, config) {
             switch (_a.label) {
                 case 0:
                     setLoading(true);
-                    return [4 /*yield*/, signOut()];
+                    return [4 /*yield*/, authService.signOut()];
                 case 1:
                     _a.sent();
                     setLoading(false);

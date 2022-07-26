@@ -2,9 +2,9 @@
 import { OktaAuthOptions } from "@okta/okta-auth-js";
 export interface LoginCallbackProps {
     redirectUrl?: string;
-    fallback?: string;
+    fallback?: JSX.Element;
 }
-export declare const LoginCallback: ({ redirectUrl, fallback }: LoginCallbackProps) => string | JSX.Element;
+export declare const LoginCallback: ({ redirectUrl, fallback }: LoginCallbackProps) => JSX.Element;
 export interface ProviderProps {
     children: JSX.Element;
 }

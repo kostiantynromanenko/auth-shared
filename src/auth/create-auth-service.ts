@@ -7,7 +7,7 @@ export const createAuthService = (provider: 'okta' | 'cognito', config?: any): A
         return new OktaAuthService(config);
     }
     if (provider === 'cognito') {
-        return new CognitoAuthService(config);
+        return new CognitoAuthService();
     }
 
     return {} as AuthService;

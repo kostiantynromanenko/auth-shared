@@ -1,9 +1,10 @@
 import React, {ReactElement, useEffect, useState} from "react";
 import {AuthContext, AuthContextState, AuthUser} from "./auth";
 import {createAuthService} from "./create-auth-service";
+import {OktaAuthOptions} from "@okta/okta-auth-js";
 
-const useProvideAuth = (provider: 'okta' | 'cognito'): AuthContextState => {
-    const authService = createAuthService(provider);
+const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthContextState => {
+    const authService = createAuthService(providerType, config);
     const [user, setUser] = useState<AuthUser | null>(null);
     const [isLoading, setLoading] = useState(true);
 
@@ -42,11 +43,15 @@ const useProvideAuth = (provider: 'okta' | 'cognito'): AuthContextState => {
 }
 
 export interface ProviderProps {
-    children: ReactElement
+    children: ReactElement;
 }
 
-export const OktaAuthContextProvider = ({ children }: ProviderProps) => {
-    const auth = useProvideAuth('okta');
+export interface OktaAuthContextProviderProps extends ProviderProps {
+    config: OktaAuthOptions
+}
+
+export const OktaAuthContextProvider = ({ children, config }: OktaAuthContextProviderProps) => {
+    const auth = useProvideAuth('okta', config);
     return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>
 }
 

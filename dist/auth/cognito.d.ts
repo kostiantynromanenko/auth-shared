@@ -11,4 +11,5 @@ export declare class CognitoAuthService implements AuthService {
     signOut(): Promise<unknown>;
     getUser(): Promise<AuthUser>;
     isAuthenticated(): Promise<boolean>;
+    handleAuthRedirect(): Promise<any>;
 }

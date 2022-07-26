@@ -105,6 +105,7 @@ var useProvideAuth = function () {
         user: user,
         isLoading: isLoading,
         signIn: signIn,
+        handleAuthRedirect: function () { return Promise.resolve(); },
         signOut: signOut,
     };
 };
@@ -155,6 +156,9 @@ var CognitoAuthService = /** @class */ (function () {
     };
     CognitoAuthService.prototype.isAuthenticated = function () {
         return CognitoAuth.currentSession().then(function (session) { return session && session.isValid(); });
+    };
+    CognitoAuthService.prototype.handleAuthRedirect = function () {
+        return Promise.resolve();
     };
     return CognitoAuthService;
 }());

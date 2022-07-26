@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 import { OktaAuthOptions } from "@okta/okta-auth-js";
+export declare const LoginCallback: () => JSX.Element;
 export interface ProviderProps {
     children: ReactElement;
 }

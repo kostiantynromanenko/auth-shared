@@ -17,6 +17,7 @@ export var AuthContext = createContext({
     isLoading: true,
     signIn: function () { return Promise.resolve(); },
     signOut: function () { return Promise.resolve(); },
+    handleAuthRedirect: function () { return Promise.resolve(); }
 });
 export var useAuth = function () { return useContext(AuthContext); };
 export var withAuth = function (WrappedComponent) {

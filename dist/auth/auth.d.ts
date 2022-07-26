@@ -15,6 +15,7 @@ export interface AuthContextState {
     isLoading: boolean;
     signIn: (credentials: SignInCredentials) => Promise<unknown>;
     signOut: () => Promise<unknown>;
+    handleAuthRedirect: () => Promise<unknown>;
 }
 export declare const AuthContext: React.Context<AuthContextState>;
 export declare const useAuth: () => AuthContextState;

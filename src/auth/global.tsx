@@ -92,7 +92,6 @@ const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthCon
         error,
         isLoading,
         handleAuthRedirect,
-        checkSession,
         signIn,
         signInWithRedirect,
         signOut,

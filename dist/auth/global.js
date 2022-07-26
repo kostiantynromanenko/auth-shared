@@ -111,19 +111,21 @@ var useProvideAuth = function (providerType, config) {
             switch (_a.label) {
                 case 0:
                     setLoading(true);
-                    isAuthenticated = authService.isAuthenticated();
-                    console.log(isAuthenticated);
-                    if (!isAuthenticated) return [3 /*break*/, 2];
-                    return [4 /*yield*/, authService.getUser()];
+                    return [4 /*yield*/, authService.isAuthenticated()];
                 case 1:
+                    isAuthenticated = _a.sent();
+                    console.log(isAuthenticated);
+                    if (!isAuthenticated) return [3 /*break*/, 3];
+                    return [4 /*yield*/, authService.getUser()];
+                case 2:
                     authUser = _a.sent();
                     console.log(authUser);
                     setUser(authUser);
-                    return [3 /*break*/, 3];
-                case 2:
-                    setUser(null);
-                    _a.label = 3;
+                    return [3 /*break*/, 4];
                 case 3:
+                    setUser(null);
+                    _a.label = 4;
+                case 4:
                     setLoading(false);
                     return [2 /*return*/];
             }

@@ -2,11 +2,14 @@ import React, {ReactElement, useEffect, useState} from "react";
 import {AuthContext, AuthContextState, AuthUser, useAuth} from "./auth";
 import {createAuthService} from "./create-auth-service";
 import {OktaAuthOptions} from "@okta/okta-auth-js";
+import {useNavigate} from "react-router-dom";
 
-export const LoginCallback = () => {
-    const { handleAuthRedirect } = useAuth();
+export const LoginCallback = ({redirectUrl = '/'}) => {
+    const {handleAuthRedirect} = useAuth();
+    const navigate = useNavigate();
+
     useEffect(() => {
-        handleAuthRedirect().catch();
+        handleAuthRedirect().then(() => navigate(redirectUrl)).catch();
     }, [handleAuthRedirect]);
 
     return <div>Loading...</div>
@@ -14,26 +17,8 @@ export const LoginCallback = () => {
 
 const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthContextState => {
     const [authService] = useState(() => createAuthService(providerType, config));
-    const [user, setUser] = useState<AuthUser | null>(null);
+    const [user] = useState<AuthUser | null>(null);
     const [isLoading, setLoading] = useState(true);
-
-    // useEffect(() => {
-    //     setLoading(true);
-    //     authService.isAuthenticated().then((isAuthenticated) => {
-    //         console.log('Authenticated: ' + isAuthenticated);
-    //         if (isAuthenticated) {
-    //             authService.getUser().then((user) => {
-    //                 console.log('User:');
-    //                 console.log(user);
-    //                 setUser(user);
-    //                 setLoading(false);
-    //             })
-    //         } else {
-    //             setUser(null);
-    //             setLoading(false);
-    //         }
-    //     });
-    // }, [])
 
     const signIn = (): Promise<any> => {
         setLoading(true);
@@ -57,19 +42,19 @@ const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthCon
 }
 
 export interface ProviderProps {
-    children: ReactElement;
+    children: JSX.Element;
 }
 
 export interface OktaAuthContextProviderProps extends ProviderProps {
     config: OktaAuthOptions
 }
 
-export const OktaAuthContextProvider = ({ children, config }: OktaAuthContextProviderProps) => {
+export const OktaAuthContextProvider = ({children, config}: OktaAuthContextProviderProps) => {
     const auth = useProvideAuth('okta', config);
     return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>
 }
 
-export const CognitoAuthContextProvider = ({ children }: ProviderProps) => {
+export const CognitoAuthContextProvider = ({children}: ProviderProps) => {
     const auth = useProvideAuth('cognito');
     return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>
 }

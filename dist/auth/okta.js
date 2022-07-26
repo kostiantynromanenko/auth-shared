@@ -65,7 +65,11 @@ var OktaAuthService = /** @class */ (function () {
             });
         }); };
         if (this.oktaAuth.token.isLoginRedirect()) {
-            handleLoginRedirect().catch(function (e) {
+            handleLoginRedirect()
+                .then(function () {
+                console.log(_this.oktaAuth.getUser());
+            })
+                .catch(function (e) {
                 console.error(e);
             });
             return Promise.resolve(true);

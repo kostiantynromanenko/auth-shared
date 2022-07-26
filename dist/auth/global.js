@@ -13,17 +13,20 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
 import { AuthContext, useAuth } from "./auth";
 import { createAuthService } from "./create-auth-service";
-export var LoginCallback = function () {
+import { useNavigate } from "react-router-dom";
+export var LoginCallback = function (_a) {
+    var _b = _a.redirectUrl, redirectUrl = _b === void 0 ? '/' : _b;
     var handleAuthRedirect = useAuth().handleAuthRedirect;
+    var navigate = useNavigate();
     useEffect(function () {
-        handleAuthRedirect().catch();
+        handleAuthRedirect().then(function () { return navigate(redirectUrl); }).catch();
     }, [handleAuthRedirect]);
     return _jsx("div", { children: "Loading..." });
 };
 var useProvideAuth = function (providerType, config) {
     var authService = useState(function () { return createAuthService(providerType, config); })[0];
-    var _a = useState(null), user = _a[0], setUser = _a[1];
-    var _b = useState(true), isLoading = _b[0], setLoading = _b[1];
+    var user = useState(null)[0];
+    var _a = useState(true), isLoading = _a[0], setLoading = _a[1];
     // useEffect(() => {
     //     setLoading(true);
     //     authService.isAuthenticated().then((isAuthenticated) => {

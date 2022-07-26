@@ -52,6 +52,7 @@ const useProvideAuth = (): AuthContextState => {
         user,
         isLoading,
         signIn,
+        handleAuthRedirect: () => Promise.resolve(),
         signOut,
     };
 };
@@ -91,5 +92,9 @@ export class CognitoAuthService implements AuthService {
 
     isAuthenticated(): Promise<boolean> {
         return CognitoAuth.currentSession().then((session) => session && session.isValid());
+    }
+
+    handleAuthRedirect(): Promise<any> {
+        return Promise.resolve();
     }
 }

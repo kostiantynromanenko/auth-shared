@@ -24,4 +24,20 @@ export class OktaAuthService implements AuthService {
     getUser(): Promise<any> {
         return this.oktaAuth.getUser();
     }
+
+    handleAuthRedirect(): Promise<boolean> {
+        const handleLoginRedirect = async () => {
+            await this.oktaAuth.handleLoginRedirect();
+        };
+
+        if (this.oktaAuth.token.isLoginRedirect()) {
+            handleLoginRedirect().catch(e => {
+                console.error(e);
+            });
+
+            return Promise.resolve(true);
+        }
+
+        return Promise.resolve(false);
+    }
 }

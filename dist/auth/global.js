@@ -197,7 +197,6 @@ var useProvideAuth = function (providerType, config) {
         error: error,
         isLoading: isLoading,
         handleAuthRedirect: handleAuthRedirect,
-        checkSession: checkSession,
         signIn: signIn,
         signInWithRedirect: signInWithRedirect,
         signOut: signOut,

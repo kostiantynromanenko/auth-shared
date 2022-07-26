@@ -17,7 +17,6 @@ export interface AuthContextState {
     signIn: (credentials: SignInCredentials) => Promise<unknown>;
     signInWithRedirect: () => Promise<unknown>;
     signOut: () => Promise<unknown>;
-    checkSession: () => Promise<unknown>;
     handleAuthRedirect: () => Promise<unknown>;
 }
 export declare const AuthContext: React.Context<AuthContextState>;

@@ -1,7 +1,7 @@
 import React from 'react';
 import {OktaAuth, OktaAuthOptions} from "@okta/okta-auth-js";
 import {AuthService} from "./auth-service";
-import {AuthUser} from "./auth";
+import {AuthUser, SignInCredentials} from "./auth";
 
 export class OktaAuthService implements AuthService {
     private oktaAuth: OktaAuth;
@@ -10,11 +10,18 @@ export class OktaAuthService implements AuthService {
         this.oktaAuth = new OktaAuth(config);
     }
 
-    signIn(): Promise<unknown> {
+    signIn({username, password}: SignInCredentials): Promise<any> {
+        return this.oktaAuth.signInWithCredentials({
+            username,
+            password
+        });
+    }
+
+    signInWithRedirect(): Promise<void> {
         return this.oktaAuth.signInWithRedirect();
     }
 
-    signOut(): Promise<unknown> {
+    signOut(): Promise<void> {
         return this.oktaAuth.signOut();
     }
 

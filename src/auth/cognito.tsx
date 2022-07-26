@@ -35,7 +35,7 @@ const useProvideAuth = (): AuthContextState => {
             } else {
                 setUser(null);
             }
-        } catch (e: Error) {
+        } catch (e: any) {
             setUser(null);
         } finally {
             setLoading(false)

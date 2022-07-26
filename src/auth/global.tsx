@@ -44,13 +44,15 @@ const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthCon
 
     const checkSession = async () => {
         setLoading(true);
-        const isAuthenticated = await authService.isAuthenticated();
-        console.log(isAuthenticated);
-        if (isAuthenticated) {
-            const authUser = await authService.getUser();
-            console.log(authUser);
-            setUser(authUser);
-        } else {
+        try {
+            const isAuthenticated = await authService.isAuthenticated();
+            if (isAuthenticated) {
+                const authUser = await authService.getUser();
+                setUser(authUser);
+            } else {
+                setUser(null);
+            }
+        } catch (e) {
             setUser(null);
         }
         setLoading(false);

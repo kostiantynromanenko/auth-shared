@@ -20,16 +20,19 @@ var useProvideAuth = function (providerType, config) {
     useEffect(function () {
         setLoading(true);
         authService.isAuthenticated().then(function (isAuthenticated) {
+            console.log('Authenticated: ' + isAuthenticated);
             if (isAuthenticated) {
                 authService.getUser().then(function (user) {
+                    console.log('User:');
+                    console.log(user);
                     setUser(user);
                     setLoading(false);
                 });
             }
             else {
                 setUser(null);
+                setLoading(false);
             }
-            setLoading(false);
         });
     });
     var signIn = function () {

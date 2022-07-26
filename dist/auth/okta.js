@@ -4,7 +4,14 @@ var OktaAuthService = /** @class */ (function () {
         this.config = config;
         this.oktaAuth = new OktaAuth(config);
     }
-    OktaAuthService.prototype.signIn = function () {
+    OktaAuthService.prototype.signIn = function (_a) {
+        var username = _a.username, password = _a.password;
+        return this.oktaAuth.signInWithCredentials({
+            username: username,
+            password: password
+        });
+    };
+    OktaAuthService.prototype.signInWithRedirect = function () {
         return this.oktaAuth.signInWithRedirect();
     };
     OktaAuthService.prototype.signOut = function () {

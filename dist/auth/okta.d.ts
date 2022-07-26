@@ -6,5 +6,6 @@ export declare const OktaAuthProvider: ({ children }: {
 export declare class OktaAuthService implements AuthService {
     signIn(): Promise<unknown>;
     signOut(): Promise<unknown>;
-    checkSession(): Promise<any>;
+    isAuthenticated(): Promise<boolean>;
+    getUser(): Promise<any>;
 }

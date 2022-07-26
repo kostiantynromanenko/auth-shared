@@ -102,7 +102,10 @@ var OktaAuthService = /** @class */ (function () {
     OktaAuthService.prototype.signOut = function () {
         return Okta.signOut();
     };
-    OktaAuthService.prototype.checkSession = function () {
+    OktaAuthService.prototype.isAuthenticated = function () {
+        return Okta.isAuthenticated();
+    };
+    OktaAuthService.prototype.getUser = function () {
         return Okta.getUser();
     };
     return OktaAuthService;

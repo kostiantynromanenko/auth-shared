@@ -9,5 +9,6 @@ export declare const CognitoAuthProvider: ({ children }: {
 export declare class CognitoAuthService implements AuthService {
     signIn(): Promise<unknown>;
     signOut(): Promise<unknown>;
-    checkSession(): Promise<AuthUser>;
+    getUser(): Promise<AuthUser>;
+    isAuthenticated(): Promise<boolean>;
 }

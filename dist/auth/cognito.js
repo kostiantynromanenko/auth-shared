@@ -147,11 +147,14 @@ var CognitoAuthService = /** @class */ (function () {
     CognitoAuthService.prototype.signOut = function () {
         return Promise.resolve();
     };
-    CognitoAuthService.prototype.checkSession = function () {
+    CognitoAuthService.prototype.getUser = function () {
         return CognitoAuth.currentAuthenticatedUser().then(function (user) { return ({
             username: user.getUsername(),
             email: user.getUsername()
         }); });
+    };
+    CognitoAuthService.prototype.isAuthenticated = function () {
+        return CognitoAuth.currentSession().then(function (session) { return session && session.isValid(); });
     };
     return CognitoAuthService;
 }());

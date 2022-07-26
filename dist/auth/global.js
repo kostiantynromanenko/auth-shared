@@ -10,18 +10,21 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 import { jsx as _jsx } from "react/jsx-runtime";
+import { useEffect, useState } from "react";
 import { AuthContext } from "./auth";
 import { createAuthService } from "./create-auth-service";
-import { useEffect, useState } from "react";
 var useProvideAuth = function (provider) {
     var authService = createAuthService(provider);
     var _a = useState(null), user = _a[0], setUser = _a[1];
     var _b = useState(true), isLoading = _b[0], setLoading = _b[1];
     useEffect(function () {
         setLoading(true);
-        authService.checkSession().then(function (user) {
-            if (user) {
-                setUser(user);
+        authService.isAuthenticated().then(function (isAuthenticated) {
+            if (isAuthenticated) {
+                authService.getUser().then(function (user) {
+                    setUser(user);
+                    setLoading(false);
+                });
             }
             else {
                 setUser(null);

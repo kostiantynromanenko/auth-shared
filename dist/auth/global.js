@@ -35,7 +35,8 @@ var useProvideAuth = function (providerType, config) {
         setLoading(true);
         return authService.signOut().then(function () { return setLoading(false); });
     };
-    var handleAuthRedirect = function () { return authService.handleAuthRedirect(); };
+    var handleAuthRedirect = function () { return authService.handleAuthRedirect()
+        .then(function () { return setLoading(false); }); };
     return {
         user: user,
         isLoading: isLoading,

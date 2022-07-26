@@ -66,12 +66,19 @@ var OktaAuthService = /** @class */ (function () {
         }); };
         if (this.oktaAuth.token.isLoginRedirect()) {
             handleLoginRedirect()
-                .then(function () {
-                console.log(_this.oktaAuth.getUser());
-            })
-                .catch(function (e) {
-                console.error(e);
-            });
+                .then(function () { return __awaiter(_this, void 0, void 0, function () {
+                var user;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, this.oktaAuth.getUser()];
+                        case 1:
+                            user = _a.sent();
+                            console.log(user);
+                            return [2 /*return*/];
+                    }
+                });
+            }); })
+                .catch(function (e) { return console.error(e); });
             return Promise.resolve(true);
         }
         return Promise.resolve(false);

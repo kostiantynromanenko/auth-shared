@@ -13,8 +13,8 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
 import { AuthContext } from "./auth";
 import { createAuthService } from "./create-auth-service";
-var useProvideAuth = function (provider) {
-    var authService = createAuthService(provider);
+var useProvideAuth = function (providerType, config) {
+    var authService = createAuthService(providerType, config);
     var _a = useState(null), user = _a[0], setUser = _a[1];
     var _b = useState(true), isLoading = _b[0], setLoading = _b[1];
     useEffect(function () {
@@ -48,8 +48,8 @@ var useProvideAuth = function (provider) {
     };
 };
 export var OktaAuthContextProvider = function (_a) {
-    var children = _a.children;
-    var auth = useProvideAuth('okta');
+    var children = _a.children, config = _a.config;
+    var auth = useProvideAuth('okta', config);
     return _jsx(AuthContext.Provider, __assign({ value: auth }, { children: children }));
 };
 export var CognitoAuthContextProvider = function (_a) {

@@ -19,46 +19,55 @@ const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthCon
     const [authService] = useState(() => createAuthService(providerType, config));
     const [user, setUser] = useState<AuthUser | null>(null);
     const [isLoading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<string>('');
 
     useEffect(() => {
         checkSession().then();
     }, [])
 
-    const signIn = async (credentials: SignInCredentials): Promise<void> => withLoading(async () => {
+    const signIn = async (credentials: SignInCredentials): Promise<void> => {
+        setLoading(true);
         try {
             await authService.signIn(credentials);
         } catch (e: Error) {
             setError('Sign in error: ' + e.message)
         }
-    })
+        setLoading(false);
+    };
 
-    const signInWithRedirect = async (): Promise<void> => withLoading(async () => {
+    const signInWithRedirect = async (): Promise<void> => {
+        setLoading(true);
         try {
             await authService.signInWithRedirect();
         } catch (e: Error) {
             setError('Sign in error: ' + e.message)
         }
-    });
+        setLoading(false);
+    };
 
-    const signOut = async (): Promise<void> => withLoading(async () => {
+    const signOut = async (): Promise<void> => {
+        setLoading(true);
         try {
             await authService.signOut();
         } catch (e: Error) {
             setError('Sign out error: ' + e.message)
         }
-    });
+        setLoading(false);
+    }
 
-    const handleAuthRedirect = async (): Promise<void> => withLoading(async () => {
+    const handleAuthRedirect = async (): Promise<void> => {
+        setLoading(true);
         try {
             const user = await authService.handleAuthRedirect();
             setUser(user);
         } catch (e: Error) {
             setError('Auth redirect error: ' + e.message);
         }
-    });
+        setLoading(false);
+    }
 
-    const checkSession = async (): Promise<void> => withLoading(async () => {
+    const checkSession = async (): Promise<void> => {
+        setLoading(true);
         try {
             const isAuthenticated = await authService.isAuthenticated();
             if (isAuthenticated) {
@@ -70,11 +79,6 @@ const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthCon
         } catch (e) {
             setUser(null);
         }
-    });
-
-    const withLoading = (action: () => void) => {
-        setLoading(true);
-        action();
         setLoading(false);
     }
 

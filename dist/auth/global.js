@@ -63,50 +63,81 @@ var useProvideAuth = function (providerType, config) {
     var authService = useState(function () { return createAuthService(providerType, config); })[0];
     var _a = useState(null), user = _a[0], setUser = _a[1];
     var _b = useState(true), isLoading = _b[0], setLoading = _b[1];
+    var _c = useState(''), error = _c[0], setError = _c[1];
     useEffect(function () {
         checkSession().then();
     }, []);
     var signIn = function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    setLoading(true);
-                    return [4 /*yield*/, authService.signIn()];
-                case 1:
-                    _a.sent();
-                    setLoading(false);
-                    return [2 /*return*/];
-            }
+            return [2 /*return*/, withLoading(function () { return __awaiter(void 0, void 0, void 0, function () {
+                    var e_1;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                _a.trys.push([0, 2, , 3]);
+                                return [4 /*yield*/, authService.signIn()];
+                            case 1:
+                                _a.sent();
+                                return [3 /*break*/, 3];
+                            case 2:
+                                e_1 = _a.sent();
+                                setError('Sign in error: ' + e_1.message);
+                                return [3 /*break*/, 3];
+                            case 3: return [2 /*return*/];
+                        }
+                    });
+                }); })];
         });
     }); };
     var signOut = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var e_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     setLoading(true);
-                    return [4 /*yield*/, authService.signOut()];
+                    _a.label = 1;
                 case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, authService.signOut()];
+                case 2:
                     _a.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_2 = _a.sent();
+                    setError('Sign out error: ' + e_2.message);
+                    return [3 /*break*/, 4];
+                case 4:
                     setLoading(false);
                     return [2 /*return*/];
             }
         });
     }); };
     var handleAuthRedirect = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var user;
+        var user_1, e_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, authService.handleAuthRedirect()];
+                case 0:
+                    setLoading(true);
+                    _a.label = 1;
                 case 1:
-                    user = _a.sent();
-                    setUser(user);
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, authService.handleAuthRedirect()];
+                case 2:
+                    user_1 = _a.sent();
+                    setUser(user_1);
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_3 = _a.sent();
+                    setError('Auth redirect error: ' + e_3.message);
+                    return [3 /*break*/, 4];
+                case 4:
                     setLoading(false);
                     return [2 /*return*/];
             }
         });
     }); };
     var checkSession = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var isAuthenticated, authUser, e_1;
+        var isAuthenticated, authUser, e_4;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -128,7 +159,7 @@ var useProvideAuth = function (providerType, config) {
                     _a.label = 5;
                 case 5: return [3 /*break*/, 7];
                 case 6:
-                    e_1 = _a.sent();
+                    e_4 = _a.sent();
                     setUser(null);
                     return [3 /*break*/, 7];
                 case 7:
@@ -137,8 +168,14 @@ var useProvideAuth = function (providerType, config) {
             }
         });
     }); };
+    var withLoading = function (action) {
+        setLoading(true);
+        action();
+        setLoading(false);
+    };
     return {
         user: user,
+        error: error,
         isLoading: isLoading,
         handleAuthRedirect: handleAuthRedirect,
         checkSession: checkSession,

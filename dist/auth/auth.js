@@ -15,6 +15,7 @@ import { Navigate, useLocation } from "react-router-dom";
 export var AuthContext = createContext({
     user: null,
     isLoading: true,
+    error: null,
     signIn: function () { return Promise.resolve(); },
     signOut: function () { return Promise.resolve(); },
     checkSession: function () { return Promise.resolve(); },

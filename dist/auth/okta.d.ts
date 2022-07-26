@@ -8,7 +8,6 @@ export declare class OktaAuthService implements AuthService {
     signIn(): Promise<unknown>;
     signOut(): Promise<unknown>;
     isAuthenticated(): Promise<boolean>;
-    getUser(): Promise<any>;
+    getUser(): Promise<AuthUser>;
     handleAuthRedirect(): Promise<AuthUser | null>;
-    private getAuthUser;
 }

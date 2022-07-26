@@ -51,13 +51,13 @@ import { AuthContext, useAuth } from "./auth";
 import { createAuthService } from "./create-auth-service";
 import { useNavigate } from "react-router-dom";
 export var LoginCallback = function (_a) {
-    var _b = _a.redirectUrl, redirectUrl = _b === void 0 ? '/' : _b;
+    var redirectUrl = _a.redirectUrl, fallback = _a.fallback;
     var handleAuthRedirect = useAuth().handleAuthRedirect;
     var navigate = useNavigate();
     useEffect(function () {
-        handleAuthRedirect().then(function () { return navigate(redirectUrl); }).catch();
+        handleAuthRedirect().then(function () { return navigate(redirectUrl || '/'); }).catch();
     }, []);
-    return _jsx("div", { children: "Loading..." });
+    return fallback || _jsx("div", { children: "Loading..." });
 };
 var useProvideAuth = function (providerType, config) {
     var authService = useState(function () { return createAuthService(providerType, config); })[0];

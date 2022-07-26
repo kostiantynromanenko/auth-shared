@@ -1,8 +1,10 @@
 /// <reference types="react" />
 import { OktaAuthOptions } from "@okta/okta-auth-js";
-export declare const LoginCallback: ({ redirectUrl }: {
-    redirectUrl?: string | undefined;
-}) => JSX.Element;
+export interface LoginCallbackProps {
+    redirectUrl?: string;
+    fallback?: string;
+}
+export declare const LoginCallback: ({ redirectUrl, fallback }: LoginCallbackProps) => string | JSX.Element;
 export interface ProviderProps {
     children: JSX.Element;
 }

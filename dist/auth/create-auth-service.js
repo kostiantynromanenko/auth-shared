@@ -5,7 +5,7 @@ export var createAuthService = function (provider, config) {
         return new OktaAuthService(config);
     }
     if (provider === 'cognito') {
-        return new CognitoAuthService(config);
+        return new CognitoAuthService();
     }
     return {};
 };

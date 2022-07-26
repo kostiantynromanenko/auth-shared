@@ -37,7 +37,7 @@ export var ProtectedRoute = function (_a) {
         return fallback || _jsx("div", { children: "Loading..." });
     }
     if (!user) {
-        return _jsx(Navigate, { to: signOutPath || '/login', state: { from: location }, replace: true });
+        return _jsx(Navigate, { to: signOutPath || '/', state: { from: location }, replace: true });
     }
     return children;
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import {OktaAuth, OktaAuthOptions} from "@okta/okta-auth-js";
 import {AuthService} from "./auth-service";
+import {AuthUser} from "./auth";
 
 export class OktaAuthService implements AuthService {
     private oktaAuth: OktaAuth;
@@ -25,22 +26,18 @@ export class OktaAuthService implements AuthService {
         return this.oktaAuth.getUser();
     }
 
-    handleAuthRedirect(): Promise<boolean> {
-        const handleLoginRedirect = async () => {
-            await this.oktaAuth.handleLoginRedirect();
-        };
-
+    handleAuthRedirect(): Promise<AuthUser | null> {
         if (this.oktaAuth.token.isLoginRedirect()) {
-            handleLoginRedirect()
+            return this.oktaAuth.handleLoginRedirect()
                 .then(async () => {
                     const user = await this.oktaAuth.getUser();
-                    console.log(user);
-                })
-                .catch(e => console.error(e));
-
-            return Promise.resolve(true);
+                    return {
+                        username: user.preferred_username,
+                        email: user.email
+                    } as AuthUser;
+                });
         }
 
-        return Promise.resolve(false);
+        return Promise.reject(null);
     }
 }

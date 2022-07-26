@@ -65,7 +65,7 @@ export const ProtectedRoute = ({ children, fallback, signOutPath }: RequiresAuth
     }
 
     if (!user) {
-        return <Navigate to={signOutPath || '/login'} state={{from: location}} replace/>;
+        return <Navigate to={signOutPath || '/'} state={{from: location}} replace/>;
     }
 
     return children;

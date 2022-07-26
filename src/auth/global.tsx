@@ -17,7 +17,7 @@ export const LoginCallback = ({redirectUrl = '/'}) => {
 
 const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthContextState => {
     const [authService] = useState(() => createAuthService(providerType, config));
-    const [user] = useState<AuthUser | null>(null);
+    const [user, setUser] = useState<AuthUser | null>(null);
     const [isLoading, setLoading] = useState(true);
 
     const signIn = (): Promise<any> => {
@@ -31,14 +31,17 @@ const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthCon
     }
 
     const handleAuthRedirect = () => authService.handleAuthRedirect()
-        .then(() => setLoading(false));
+        .then((user) => {
+            setUser(user);
+            setLoading(false)
+        });
 
     return {
         user,
         isLoading,
         handleAuthRedirect,
         signIn,
-        signOut
+        signOut,
     }
 }
 

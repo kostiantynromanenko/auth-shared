@@ -54,18 +54,8 @@ var OktaAuthService = /** @class */ (function () {
     };
     OktaAuthService.prototype.handleAuthRedirect = function () {
         var _this = this;
-        var handleLoginRedirect = function () { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.oktaAuth.handleLoginRedirect()];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        }); };
         if (this.oktaAuth.token.isLoginRedirect()) {
-            handleLoginRedirect()
+            return this.oktaAuth.handleLoginRedirect()
                 .then(function () { return __awaiter(_this, void 0, void 0, function () {
                 var user;
                 return __generator(this, function (_a) {
@@ -73,15 +63,15 @@ var OktaAuthService = /** @class */ (function () {
                         case 0: return [4 /*yield*/, this.oktaAuth.getUser()];
                         case 1:
                             user = _a.sent();
-                            console.log(user);
-                            return [2 /*return*/];
+                            return [2 /*return*/, {
+                                    username: user.preferred_username,
+                                    email: user.email
+                                }];
                     }
                 });
-            }); })
-                .catch(function (e) { return console.error(e); });
-            return Promise.resolve(true);
+            }); });
         }
-        return Promise.resolve(false);
+        return Promise.reject(null);
     };
     return OktaAuthService;
 }());

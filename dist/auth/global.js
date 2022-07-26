@@ -25,8 +25,8 @@ export var LoginCallback = function (_a) {
 };
 var useProvideAuth = function (providerType, config) {
     var authService = useState(function () { return createAuthService(providerType, config); })[0];
-    var user = useState(null)[0];
-    var _a = useState(true), isLoading = _a[0], setLoading = _a[1];
+    var _a = useState(null), user = _a[0], setUser = _a[1];
+    var _b = useState(true), isLoading = _b[0], setLoading = _b[1];
     var signIn = function () {
         setLoading(true);
         return authService.signIn().then(function () { return setLoading(false); });
@@ -36,13 +36,16 @@ var useProvideAuth = function (providerType, config) {
         return authService.signOut().then(function () { return setLoading(false); });
     };
     var handleAuthRedirect = function () { return authService.handleAuthRedirect()
-        .then(function () { return setLoading(false); }); };
+        .then(function (user) {
+        setUser(user);
+        setLoading(false);
+    }); };
     return {
         user: user,
         isLoading: isLoading,
         handleAuthRedirect: handleAuthRedirect,
         signIn: signIn,
-        signOut: signOut
+        signOut: signOut,
     };
 };
 export var OktaAuthContextProvider = function (_a) {

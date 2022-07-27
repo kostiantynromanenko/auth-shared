@@ -7,7 +7,7 @@ export var LoginCallback = function (_a) {
     var handleAuthRedirect = useAuth().handleAuthRedirect;
     var navigate = useNavigate();
     useEffect(function () {
-        handleAuthRedirect().then(function () { return navigate(redirectUrl || '/'); }).catch();
+        handleAuthRedirect().then(function () { return navigate(redirectUrl || '/', { replace: true }); }).catch();
     }, []);
     return fallback || _jsx("div", { children: "Loading..." });
 };

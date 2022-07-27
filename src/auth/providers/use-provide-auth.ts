@@ -1,26 +1,8 @@
-import React, {useEffect, useState} from "react";
-import {AuthContext, AuthContextState, AuthUser, SignInCredentials, useAuth} from "./auth";
-import {createAuthService} from "./create-auth-service";
-import {OktaAuthOptions} from "@okta/okta-auth-js";
-import {useNavigate} from "react-router-dom";
+import {createAuthService, ProviderType} from "./create-auth";
+import {AuthContextState, AuthUser, SignInCredentials} from "../auth";
+import {useEffect, useState} from "react";
 
-export interface LoginCallbackProps {
-    redirectUrl?: string;
-    fallback?: JSX.Element;
-}
-
-export const LoginCallback = ({redirectUrl, fallback}: LoginCallbackProps) => {
-    const {handleAuthRedirect} = useAuth();
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        handleAuthRedirect().then(() => navigate(redirectUrl || '/')).catch();
-    }, []);
-
-    return fallback || <div>Loading...</div>
-}
-
-const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthContextState => {
+export const useProvideAuth = (providerType: ProviderType, config?: any): AuthContextState => {
     const [authService] = useState(() => createAuthService(providerType, config));
     const [user, setUser] = useState<AuthUser | null>(null);
     const [isLoading, setLoading] = useState(true);
@@ -96,22 +78,4 @@ const useProvideAuth = (providerType: 'okta' | 'cognito', config?: any): AuthCon
         signInWithRedirect,
         signOut,
     }
-}
-
-export interface ProviderProps {
-    children: JSX.Element;
-}
-
-export interface OktaAuthContextProviderProps extends ProviderProps {
-    config: OktaAuthOptions
-}
-
-export const OktaAuthContextProvider = ({children, config}: OktaAuthContextProviderProps) => {
-    const auth = useProvideAuth('okta', config);
-    return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>
-}
-
-export const CognitoAuthContextProvider = ({children}: ProviderProps) => {
-    const auth = useProvideAuth('cognito');
-    return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>
 }

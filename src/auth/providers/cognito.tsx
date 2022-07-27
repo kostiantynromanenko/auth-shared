@@ -1,13 +1,13 @@
-import React from 'react';
+import React, {ReactElement} from 'react';
 import {Auth} from 'aws-amplify';
 import {CognitoUser} from 'amazon-cognito-identity-js';
-import {AuthUser, SignInCredentials} from './auth';
-import {AuthService} from './auth-service';
+import {AuthContext, AuthUser, SignInCredentials} from '../auth';
+import {AuthService} from '../auth-service';
+import {useProvideAuth} from "./use-provide-auth";
 
 export const CognitoAuth = Auth;
 
 export class CognitoAuthService implements AuthService {
-
     signIn({username, password}: SignInCredentials): Promise<any> {
         return CognitoAuth.signIn({
             username,
@@ -37,4 +37,13 @@ export class CognitoAuthService implements AuthService {
     handleAuthRedirect(): Promise<AuthUser> {
         return this.getUser();
     }
+}
+
+export interface CognitoAuthProviderProps {
+    children: ReactElement;
+}
+
+export const CognitoAuthProvider = ({children}: CognitoAuthProviderProps) => {
+    const auth = useProvideAuth('cognito');
+    return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>
 }

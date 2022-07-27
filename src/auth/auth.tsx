@@ -1,5 +1,4 @@
 import React, {createContext, useContext} from 'react';
-import {Navigate, useLocation} from "react-router-dom";
 
 export interface AuthUser {
     username: string;
@@ -18,10 +17,10 @@ export interface AuthContextState {
     user: AuthUser | null;
     isLoading: boolean,
     error: string | null,
-    signIn: (credentials: SignInCredentials) => Promise<unknown>;
-    signInWithRedirect: () => Promise<unknown>,
+    signIn: (credentials: SignInCredentials) => Promise<any>;
+    signInWithRedirect: () => Promise<any>,
     signOut: () => Promise<unknown>;
-    handleAuthRedirect: () => Promise<unknown>;
+    handleAuthRedirect: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextState>({
@@ -35,42 +34,3 @@ export const AuthContext = createContext<AuthContextState>({
 });
 
 export const useAuth = () => useContext(AuthContext);
-
-export interface WithAuthProps extends AuthContextState {}
-
-export const withAuth = <T extends WithAuthProps = WithAuthProps>(
-    WrappedComponent: React.ComponentType<T>
-) => {
-    const displayName =
-        WrappedComponent.displayName || "Component";
-
-    const ComponentWithTheme = (props: Omit<T, keyof WithAuthProps>) => {
-        const authProps = useAuth();
-        return <WrappedComponent {...authProps} {...(props as T)} />;
-    };
-
-    ComponentWithTheme.displayName = `withAuth(${displayName})`;
-
-    return ComponentWithTheme;
-}
-
-export interface ProtectedRouteProps {
-    children: JSX.Element,
-    fallback?: JSX.Element,
-    signOutPath?: string
-}
-
-export const ProtectedRoute = ({ children, fallback, signOutPath }: ProtectedRouteProps) => {
-    const {user, isLoading} = useAuth();
-    const location = useLocation();
-
-    if (isLoading) {
-        return fallback || <div>Loading...</div>;
-    }
-
-    if (!user) {
-        return <Navigate to={signOutPath || '/'} state={{from: location}} replace/>;
-    }
-
-    return children;
-}

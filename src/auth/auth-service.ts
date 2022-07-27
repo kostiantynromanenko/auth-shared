@@ -1,8 +1,8 @@
 import {AuthUser, SignInCredentials} from "./auth";
 
 export interface AuthService {
-    signIn: (credentials: SignInCredentials) => Promise<unknown>;
-    signInWithRedirect: () => Promise<unknown>;
+    signIn: (credentials: SignInCredentials) => Promise<any>;
+    signInWithRedirect: () => Promise<any>;
     signOut: () => Promise<unknown>;
 
     isAuthenticated(): Promise<boolean>
@@ -11,3 +11,4 @@ export interface AuthService {
 
     handleAuthRedirect(): Promise<AuthUser | null>;
 }
+

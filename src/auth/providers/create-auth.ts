@@ -1,8 +1,10 @@
 import {OktaAuthService} from "./okta";
-import {AuthService} from "./auth-service";
 import {CognitoAuthService} from "./cognito";
+import {AuthService} from "../auth-service";
 
-export const createAuthService = (provider: 'okta' | 'cognito', config?: any): AuthService => {
+export type ProviderType = 'okta' | 'cognito';
+
+export const createAuthService = (provider: ProviderType, config?: any): AuthService => {
     if (provider === 'okta') {
         return new OktaAuthService(config);
     }

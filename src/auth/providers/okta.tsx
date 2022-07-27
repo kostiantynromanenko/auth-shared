@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {ReactElement} from 'react';
 import {OktaAuth, OktaAuthOptions} from "@okta/okta-auth-js";
-import {AuthService} from "./auth-service";
-import {AuthUser, SignInCredentials} from "./auth";
+import {AuthService} from "../auth-service";
+import {AuthContext, AuthUser, SignInCredentials} from "../auth";
+import {useProvideAuth} from "./use-provide-auth";
 
 export class OktaAuthService implements AuthService {
     private oktaAuth: OktaAuth;
@@ -45,3 +46,14 @@ export class OktaAuthService implements AuthService {
         return Promise.reject('No logins redirected.');
     }
 }
+
+export interface OktaAuthProviderProps {
+    children: ReactElement;
+    config: OktaAuthOptions;
+}
+
+export const OktaAuthProvider = ({children, config}: OktaAuthProviderProps) => {
+    const auth = useProvideAuth('okta', config);
+    return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>
+}
+

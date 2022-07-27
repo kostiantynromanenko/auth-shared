@@ -12,7 +12,7 @@ export const LoginCallback = ({redirectUrl, fallback}: LoginCallbackProps) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        handleAuthRedirect().then(() => navigate(redirectUrl || '/')).catch();
+        handleAuthRedirect().then(() => navigate(redirectUrl || '/', {replace: true})).catch();
     }, []);
 
     return fallback || <div>Loading...</div>

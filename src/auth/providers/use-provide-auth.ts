@@ -16,7 +16,7 @@ export const useProvideAuth = (providerType: ProviderType, config?: any): AuthCo
         setLoading(true);
         try {
             await authService.signIn(credentials);
-        } catch (e: Error) {
+        } catch (e: any) {
             setError('Sign in error: ' + e.message)
         }
         setLoading(false);
@@ -26,7 +26,7 @@ export const useProvideAuth = (providerType: ProviderType, config?: any): AuthCo
         setLoading(true);
         try {
             await authService.signInWithRedirect();
-        } catch (e: Error) {
+        } catch (e: any) {
             setError('Sign in error: ' + e.message)
         }
         setLoading(false);
@@ -36,7 +36,7 @@ export const useProvideAuth = (providerType: ProviderType, config?: any): AuthCo
         setLoading(true);
         try {
             await authService.signOut();
-        } catch (e: Error) {
+        } catch (e: any) {
             setError('Sign out error: ' + e.message)
         }
         setLoading(false);
@@ -47,7 +47,7 @@ export const useProvideAuth = (providerType: ProviderType, config?: any): AuthCo
         try {
             const user = await authService.handleAuthRedirect();
             setUser(user);
-        } catch (e: Error) {
+        } catch (e: any) {
             setError('Auth redirect error: ' + e.message);
         }
         setLoading(false);
@@ -63,7 +63,7 @@ export const useProvideAuth = (providerType: ProviderType, config?: any): AuthCo
             } else {
                 setUser(null);
             }
-        } catch (e) {
+        } catch (e: any) {
             setUser(null);
         }
         setLoading(false);

@@ -1,6 +1,7 @@
+import { ReactElement } from 'react';
 import { OktaAuthOptions } from "@okta/okta-auth-js";
-import { AuthService } from "./auth-service";
-import { AuthUser, SignInCredentials } from "./auth";
+import { AuthService } from "../auth-service";
+import { AuthUser, SignInCredentials } from "../auth";
 export declare class OktaAuthService implements AuthService {
     private config;
     private oktaAuth;
@@ -12,3 +13,8 @@ export declare class OktaAuthService implements AuthService {
     getUser(): Promise<AuthUser>;
     handleAuthRedirect(): Promise<AuthUser | null>;
 }
+export interface OktaAuthProviderProps {
+    children: ReactElement;
+    config: OktaAuthOptions;
+}
+export declare const OktaAuthProvider: ({ children, config }: OktaAuthProviderProps) => JSX.Element;

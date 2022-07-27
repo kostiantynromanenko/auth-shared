@@ -1,4 +1,18 @@
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+import { jsx as _jsx } from "react/jsx-runtime";
 import { OktaAuth } from "@okta/okta-auth-js";
+import { AuthContext } from "../auth";
+import { useProvideAuth } from "./use-provide-auth";
 var OktaAuthService = /** @class */ (function () {
     function OktaAuthService(config) {
         this.config = config;
@@ -37,3 +51,8 @@ var OktaAuthService = /** @class */ (function () {
     return OktaAuthService;
 }());
 export { OktaAuthService };
+export var OktaAuthProvider = function (_a) {
+    var children = _a.children, config = _a.config;
+    var auth = useProvideAuth('okta', config);
+    return _jsx(AuthContext.Provider, __assign({ value: auth }, { children: children }));
+};

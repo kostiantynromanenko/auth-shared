@@ -1,5 +1,4 @@
 import React, {createContext, useContext} from 'react';
-import {AuthService} from "./auth-service";
 
 export interface AuthUser {
     username: string;
@@ -21,8 +20,8 @@ export interface AuthContextState {
     signIn: (credentials: SignInCredentials) => Promise<any>;
     signInWithRedirect: () => Promise<any>,
     signOut: () => Promise<unknown>;
-    handleAuthRedirect: () => Promise<void>;
-    authService: AuthService | null;
+    handleAuthRedirect: () => Promise<void>,
+    checkSession: () => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextState>({
@@ -33,7 +32,7 @@ export const AuthContext = createContext<AuthContextState>({
     signInWithRedirect: () => Promise.resolve(),
     signOut: () => Promise.resolve(),
     handleAuthRedirect: () => Promise.resolve(),
-    authService: null
+    checkSession: () => Promise.resolve()
 });
 
 export const useAuth = () => useContext(AuthContext);

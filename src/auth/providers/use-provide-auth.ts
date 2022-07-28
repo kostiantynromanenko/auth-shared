@@ -77,6 +77,6 @@ export const useProvideAuth = (providerType: ProviderType, config?: any): AuthCo
         signIn,
         signInWithRedirect,
         signOut,
-        authService
+        checkSession
     }
 }

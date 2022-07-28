@@ -7,6 +7,6 @@ export var AuthContext = createContext({
     signInWithRedirect: function () { return Promise.resolve(); },
     signOut: function () { return Promise.resolve(); },
     handleAuthRedirect: function () { return Promise.resolve(); },
-    authService: null
+    checkSession: function () { return Promise.resolve(); }
 });
 export var useAuth = function () { return useContext(AuthContext); };

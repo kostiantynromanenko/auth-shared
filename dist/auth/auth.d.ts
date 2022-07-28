@@ -1,4 +1,5 @@
 import React from 'react';
+import { AuthService } from "./auth-service";
 export interface AuthUser {
     username: string;
     email: string;
@@ -18,6 +19,7 @@ export interface AuthContextState {
     signInWithRedirect: () => Promise<any>;
     signOut: () => Promise<unknown>;
     handleAuthRedirect: () => Promise<void>;
+    authService: AuthService | null;
 }
 export declare const AuthContext: React.Context<AuthContextState>;
 export declare const useAuth: () => AuthContextState;

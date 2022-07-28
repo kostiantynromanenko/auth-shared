@@ -13,10 +13,10 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import { useAuth } from "../auth";
 export var withAuth = function (WrappedComponent) {
     var displayName = WrappedComponent.displayName || "Component";
-    var ComponentWithTheme = function (props) {
+    var ComponentWithAuth = function (props) {
         var authProps = useAuth();
         return _jsx(WrappedComponent, __assign({}, authProps, props));
     };
-    ComponentWithTheme.displayName = "withAuth(".concat(displayName, ")");
-    return ComponentWithTheme;
+    ComponentWithAuth.displayName = "withAuth(".concat(displayName, ")");
+    return ComponentWithAuth;
 };

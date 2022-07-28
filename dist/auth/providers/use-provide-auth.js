@@ -177,5 +177,6 @@ export var useProvideAuth = function (providerType, config) {
         signIn: signIn,
         signInWithRedirect: signInWithRedirect,
         signOut: signOut,
+        authService: authService
     };
 };

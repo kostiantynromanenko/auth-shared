@@ -9,12 +9,12 @@ export const withAuth = <T extends WithAuthProps = WithAuthProps>(
     const displayName =
         WrappedComponent.displayName || "Component";
 
-    const ComponentWithTheme = (props: Omit<T, keyof WithAuthProps>) => {
+    const ComponentWithAuth = (props: Omit<T, keyof WithAuthProps>) => {
         const authProps = useAuth();
         return <WrappedComponent {...authProps} {...(props as T)} />;
     };
 
-    ComponentWithTheme.displayName = `withAuth(${displayName})`;
+    ComponentWithAuth.displayName = `withAuth(${displayName})`;
 
-    return ComponentWithTheme;
+    return ComponentWithAuth;
 }
